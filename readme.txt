@@ -1,0 +1,3 @@
+This git reposity is for school parking lot access control
+the directory project_Count is arduino sketch for counting and verifing RFID tag
+the directory gate_Openner is arduino sketch for openning gate...
