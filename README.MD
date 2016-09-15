@@ -1,2 +1,2 @@
 # project_GATE
-# test# test
+ Just a school project...
