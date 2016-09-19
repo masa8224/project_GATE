@@ -5,6 +5,7 @@
    </head>
 
    <h1>RFID UID</h1>
+   <a href="compare.php">for identity version</a>
    <hr>
    <?php
 		$con=mysqli_connect("localhost","root","00125410","arduino");

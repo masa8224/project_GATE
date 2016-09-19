@@ -11,4 +11,7 @@ $query = "INSERT INTO `Persons`(`name`, `surname`, `SID`, `reg_date`, `uid`, `cl
 mysql_query($query,$link);
 mysql_close($link);
 header("Location: testform.html");
+echo"<script language=\"JavaScript\">";
+echo"alert('POST CMPL!')";
+echo"</script>";
 ?>
