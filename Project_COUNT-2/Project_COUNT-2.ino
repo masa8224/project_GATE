@@ -14,6 +14,7 @@ IPAddress ip(192, 168, 1, 178);
 byte server[] = { 192,168,0,108 }; 
 int combine;
 String data;
+String dataString;
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 RTC_DS1307 rtc;
 EthernetClient client;
@@ -48,8 +49,10 @@ void setup()
 }
 
 void loop(){  
-  String dataString = "";  
+  dataString = "";  
   String lcdString = "";
+  String date = "";
+  String timenow = "";
   if ( ! mfrc522.PICC_IsNewCardPresent()) {   
     return;
   }
@@ -74,24 +77,14 @@ void loop(){
   combine <<= 8; 
   combine |= readCard[0];  
   Serial.println(combine);
-  lcdString += "UID > "+String(combine);
+  lcdString = "UID > "+String(combine);
   data = "uid=" + String(combine); 
-  dataString += String(now.day()) +"/"+String(now.month())+"/" +String(now.year()) +"  "+ String(now.hour()) + ":"+ String(now.minute())+ ":"+ String(now.second()) + " > " + String(combine);
-  File dataFile = SD.open("datalog.txt", FILE_WRITE);
-  if (dataFile) {
-    dataFile.println(dataString);
-    dataFile.close();    
-    Serial.println(dataString);
-    Serial.println("Write!");
-  }  
-  else {
-    Serial.println("error opening datalog.txt");
-  }
+  date = String(now.day()) +"/"+String(now.month())+"/" +String(now.year()) ;
+  timenow = String(now.hour()) + ":"+ String(now.minute())+ ":"+ String(now.second());
+  dataString = date +"  "+ timenow + " > " + String(combine);
+  WriteToSD();
   lcd.clear();
   lcd.print(lcdString);
-  if (combine == 231317241){
-    Serial.println("Access Granted!");
-  }  
   postData();
   dataString = "";
   data ="";
@@ -103,6 +96,18 @@ void loop(){
   lcd.clear();
   lcd.print("Stand By...");
   //mfrc522.PICC_DumpToSerial(&(mfrc522.uid)); 
+}
+void WriteToSD(){
+  File dataFile = SD.open("datalog.txt", FILE_WRITE);
+  if (dataFile) {
+    dataFile.println(dataString);
+    dataFile.close();    
+    Serial.println(dataString);
+    Serial.println("Write!");
+  }  
+  else {
+    Serial.println("error opening datalog.txt");
+  }
 }
 void postData(){
   if (client.connect("192.168.1.102",80)) { 
