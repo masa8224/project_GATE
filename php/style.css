@@ -1,0 +1,38 @@
+body{
+	background-color: #f0fbfb;
+}
+h1{
+	color: #4d4d4d;
+}
+hr {	
+	border: none;	
+	border-top: 1px solid #cccccc;
+	height: 1px;
+}
+table{
+	margin: 1em auto 1em auto;
+	border: 2px solid #ccc;
+	border-collapse: collapse;
+}
+th{
+	text-align: center;
+	padding: 2px 8px 2px 8px;
+	border: 2px solid #ccc;
+	background-color:lightgreen;
+}
+td{
+	border: 2px solid #ccc;
+	padding: 10px;
+    	text-align: left;
+}
+input[type=text],input[type=number] {
+	-webkit-transition: width 0.4s ease-in-out;
+    	transition: width 0.4s ease-in-out;    	
+   	padding: 8px 12px;
+    	margin: 8px 0;
+    	box-sizing: border-box;
+	font-size: 100%
+}
+input[type=text]:focus {
+    	width: 50%;
+}

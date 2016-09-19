@@ -33,7 +33,9 @@ void setup()
     Serial.println("Error!: RTC not found");
   }
   if (!SD.begin(4)) {
-      Serial.println("ERROR - SD card initialization failed!");       
+      Serial.println("ERROR - SD card initialization failed!");     
+      lcd.clear();
+      lcd.print("Init FAILED!");  
       return;    
   }
   Serial.println("SUCCESS - SD card initialized."); 
@@ -60,13 +62,11 @@ void loop(){
     return;
   }  
   digitalWrite(13,HIGH);
-  digitalWrite(6,HIGH);
-  Serial.println("--------------------------------");
+  digitalWrite(6,HIGH);  
   for (int i = 0; i < 4; i++) {  //
     readCard[i] = mfrc522.uid.uidByte[i];
   }
-  Serial.println();
-  Serial.println("--------------------------------");
+  Serial.println();  
   DateTime now = rtc.now();
   uint32_t combine = 0;
   combine = readCard[3];
@@ -76,11 +76,12 @@ void loop(){
   combine |= readCard[1];
   combine <<= 8; 
   combine |= readCard[0];  
+  Serial.println("--------------------------------");
   Serial.println(combine);
-  lcdString = "UID > "+String(combine);
-  data = "uid=" + String(combine); 
-  date = String(now.day()) +"/"+String(now.month())+"/" +String(now.year()) ;
+  date = String(now.year()) +"-"+String(now.month())+"-" +String(now.day()) ;
   timenow = String(now.hour()) + ":"+ String(now.minute())+ ":"+ String(now.second());
+  lcdString = "UID > "+String(combine);
+  data = "date=" + date + "&time=" + timenow + "&uid=" + String(combine);   
   dataString = date +"  "+ timenow + " > " + String(combine);
   WriteToSD();
   lcd.clear();
@@ -88,6 +89,7 @@ void loop(){
   postData();
   dataString = "";
   data ="";
+  Serial.println("--------------------------------");
   delay(200);
   digitalWrite(6,LOW);
   delay(300);
@@ -95,7 +97,6 @@ void loop(){
   delay(800);
   lcd.clear();
   lcd.print("Stand By...");
-  //mfrc522.PICC_DumpToSerial(&(mfrc522.uid)); 
 }
 void WriteToSD(){
   File dataFile = SD.open("datalog.txt", FILE_WRITE);
@@ -110,6 +111,7 @@ void WriteToSD(){
   }
 }
 void postData(){
+  Serial.println(data);
   if (client.connect("192.168.1.102",80)) { 
     Serial.println("Server Connected!");
     client.println("POST /add.php HTTP/1.1"); 
@@ -119,8 +121,9 @@ void postData(){
     client.println(data.length()); 
     client.println(); 
     client.print(data); 
-    Serial.println(data);
-    Serial.println("Post Complete");
+    Serial.println("POST CMPL!");
+  }else{
+    Serial.println("POST Failed or server offline");
   }
   if (client.connected()) { 
     client.stop();  
