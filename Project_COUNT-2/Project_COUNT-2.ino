@@ -25,7 +25,7 @@ void setup()
   SPI.begin();    
   lcd.begin();
   Serial.println("Initializing...");
-  lcd.print("Initializing SD card...");
+  lcd.print("Init...");
   Ethernet.begin(mac,ip);  
 
   if (!rtc.begin()){
@@ -105,7 +105,7 @@ void loop(){
   //mfrc522.PICC_DumpToSerial(&(mfrc522.uid)); 
 }
 void postData(){
-  if (client.connect("192.168.1.108",80)) { 
+  if (client.connect("192.168.1.102",80)) { 
     Serial.println("Server Connected!");
     client.println("POST /add.php HTTP/1.1"); 
     client.println("Host: 192.168.1.108"); 
