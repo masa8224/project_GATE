@@ -21,29 +21,46 @@ EthernetClient client;
 void setup()
 {   
   pinMode(13,OUTPUT);
-  pinMode(6,OUTPUT);         
+  pinMode(6,OUTPUT);  
+  //Begin       
   Serial.begin(9600);   
   SPI.begin();    
-  lcd.begin();
+  lcd.begin();  
+  Ethernet.begin(mac,ip); 
+  mfrc522.PCD_Init();
   Serial.println("Initializing...");
-  lcd.print("Init...");
-  Ethernet.begin(mac,ip);  
-
+  lcd.print("Init..."); 
+  //RTC Check
   if (!rtc.begin()){
     Serial.println("Error!: RTC not found");
   }
+  //SD Check
   if (!SD.begin(4)) {
       Serial.println("ERROR - SD card initialization failed!");     
       lcd.clear();
       lcd.print("Init FAILED!");  
       return;    
   }
-  Serial.println("SUCCESS - SD card initialized."); 
+  Serial.println("SUCCESS - SD card initialized.");
   lcd.clear();
   lcd.setCursor(0,0);
+  lcd.print("SD FOUND"); 
+  //Server Check
+  if (client.connect("192.168.1.104",80)) { 
+    lcd.setCursor(0,1);
+    Serial.println("Server Connected!");    
+    lcd.print("Server online");
+  }else{
+    lcd.setCursor(0,1);
+    Serial.println("Server offline");
+    lcd.print("Server offline");
+  }
+  if (client.connected()) { 
+    client.stop();  
+  }
+  //
+  lcd.setCursor(0,2);
   lcd.print("Init SUCCESS!"); 
-  mfrc522.PCD_Init();
-  mfrc522.PCD_DumpVersionToSerial(); 
   Serial.println("Stand By for Card");
   delay(1000);
   lcd.clear();
@@ -112,7 +129,7 @@ void WriteToSD(){
 }
 void postData(){
   Serial.println(data);
-  if (client.connect("192.168.1.102",80)) { 
+  if (client.connect("192.168.1.104",80)) { 
     Serial.println("Server Connected!");
     client.println("POST /add.php HTTP/1.1"); 
     client.println("Host: 192.168.1.108"); 
