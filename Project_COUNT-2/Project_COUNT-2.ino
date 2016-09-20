@@ -28,6 +28,7 @@ void setup()
   lcd.begin();  
   Ethernet.begin(mac,ip); 
   mfrc522.PCD_Init();
+  //
   Serial.println("Initializing...");
   lcd.print("Init..."); 
   //RTC Check
