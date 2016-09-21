@@ -1,19 +1,13 @@
 <?php
-
 	function Connection(){
 		$server="localhost";
 		$user="root";
 		$pass="00125410";
-		$db="arduino";
-	   	
-		$connection = mysql_connect($server, $user, $pass);
-
+		$db="arduino";	   	
+		$connection = mysqli_connect($server, $user, $pass, $db);
 		if (!$connection) {
-	    	die('MySQL ERROR: ' . mysql_error());
-		}
-		
-		mysql_select_db($db) or die( 'MySQL ERROR: '. mysql_error() );
-
+	    	die('MySQL ERROR: ' . mysqli_error());
+		}		
 		return $connection;
 	}
 ?>

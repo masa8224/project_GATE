@@ -27,8 +27,8 @@ if($_GET["txtKeyword"] != ""){
 	INNER JOIN Persons
 	WHERE Persons.name LIKE '$word'
 	AND Persons.uid=RFID.UID;");
-	echo "<table>
-	  <tr>
+	echo"<table>
+		<tr>
 		<th>Login DATE</th>
 		<th>Login TIME</th>
 		<th>Login UID</th>
@@ -36,7 +36,7 @@ if($_GET["txtKeyword"] != ""){
 		<th>SURNAME</th>
 		<th>Student ID</th>
 		<th>REGISTRATION DATE</th>
-	  </tr>";
+		</tr>";
 	while($row = mysqli_fetch_array($result)){
 		echo "<tr>";			
 		echo "<td>" . $row['date'] . "</td>";
