@@ -10,15 +10,22 @@
 </head>
 <body>
 <ul>
-  <li class="name">NTS RFID System</li>  
-  <div style="float: right;">
-  <li class="logout"><a onclick="logout()" href="login.php">logout</a></li>
-  <li><a>Login as <?php echo $_COOKIE[user];?></a></li>  
-  </div>
+	<li class="name">NTS RFID System</li> 	
+	<li class="dropdown">
+    <a href="#" class="dropbtn">MAIN ></a>
+    <div class="dropdown-content">
+      <a href="#">Student Database</a>
+      <a href="reg.php">RFID Registration</a>
+    </div>
+  </li>
+	<li><a>LOG</a></li>   
+	<div style="float: right;">
+	<li class="logout"><a onclick="logout()" href="login.php">logout</a></li>
+	<li><a>Login as <?php echo $_COOKIE[user];?></a></li>  
+	</div>
 </ul>
 
 <div class="content">
-<br>
 <form method="get">
   <table style="width:40%;">
     <tr>

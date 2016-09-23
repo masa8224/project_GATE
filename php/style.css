@@ -135,7 +135,6 @@ input[type="submit"] {
 .logout{
 	float: right;
 	background-color: red;
-	cursor: pointer;
 }
 ul {
 	font-size: 1.5em;
@@ -143,9 +142,6 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-	position: fixed;
-    top: 0;
-    width: 100%;
     background-color: #333;
 }
 
@@ -153,16 +149,42 @@ li {
     float: left;
 }
 
-li a {
-    display: block;
+li a, .dropbtn {
+    display: inline-block;
     color: white;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
 }
 
-li a:hover:not(.active) {
-    background-color: #111;
+li a:hover, .dropdown:hover .dropbtn {
+    background-color: red;
+}
+
+li.dropdown {
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+    display: block;
 }
 
 .active {
@@ -175,28 +197,16 @@ li a:hover:not(.active) {
     padding: 14px 16px; 
 	background-color: #4CAF50;
 }
-.dropdown{
-	cursor: pointer;
-	display: block;
-	text-align: left;
-	font-weight: normal;
-	text-decoration: underline;
+.conreg{
+	margin: 60px;
 }
-.dropdown + input{
-	display: none;
-}
-.dropdown + input + div{
-	display: none;
-}
-.dropdown + input:checked + div{
-	display: inline-block;
-}
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    padding: 12px 16px;
-    z-index: 1;
+.conreg input , select{
+	width: 30%;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 20px;
+	padding-left: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
