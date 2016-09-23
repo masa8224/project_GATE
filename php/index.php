@@ -14,7 +14,7 @@
 	<li class="dropdown">
     <a href="#" class="dropbtn">MAIN ></a>
     <div class="dropdown-content">
-      <a href="#">Student Database</a>
+      <a href="stu.php">Student Database</a>
       <a href="reg.php">RFID Registration</a>
     </div>
   </li>
