@@ -210,3 +210,7 @@ li.dropdown {
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
+.normal{
+	float: left;
+	text-align: left;
+}

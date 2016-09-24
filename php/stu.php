@@ -32,10 +32,10 @@
       <th>FILTER > NAME:
       <input class="search" name="filter" type="text" id="filter" value="<?php echo $_GET["filter"];?>">
       <input type="submit" value="Search">	  
-	  <label class="advance" for="_1">Advance Filter</label>
-	  <input id="_1" type="checkbox"> 
 	  <div class="normal">
-			<input type="date" name="date" value="<?php echo $_GET["date"];?>">
+	  <label>Sort by</label><br>
+			 <input type="radio" name="sort" value="name" checked> Name<br>
+			 <input type="radio" name="sort" value="SID" > Student ID<br>
       </div>
 	  </th>
     </tr>
@@ -45,12 +45,13 @@
 <?php
 include("connect.php");   	
 $con=Connection();
-if($_GET["filter"] or $_GET["date"]){
-	$filter=$_GET["filter"];	
+if($_GET["filter"] or $_GET["date"] or $_GET["sort"]){
+	$filter=$_GET["filter"];
+	$sort="name";
 	$query="SELECT *
 	FROM Persons	
 	WHERE Persons.name LIKE '%".$filter."%'	
-	ORDER BY name DESC;";
+	ORDER BY $sort DESC;";
 	$result = mysqli_query($con,$query);
 	if (mysqli_num_rows($result)) {
 		$rowcount=mysqli_num_rows($result);		
@@ -78,9 +79,10 @@ if($_GET["filter"] or $_GET["date"]){
 	}	
 	mysqli_close($con);
 }else{
+	$sort="SID";
 	$query="SELECT *
 	FROM Persons	
-	ORDER BY name DESC;";
+	ORDER BY name ASC;";
 	$result = mysqli_query($con,$query);
 	if (mysqli_num_rows($result)) {		
 		echo "<table>
