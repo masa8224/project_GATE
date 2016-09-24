@@ -1,5 +1,5 @@
 body{
-	background-color: #f0fbfb;
+	background-color: lightblue;
 	margin: 0;
 }
 h1{
@@ -10,13 +10,15 @@ hr {
 	border-top: 1px solid #cccccc;
 	height: 1px;
 }
-table{
-	-webkit-transition: height 0.4s ease-in-out;
-    transition: height 0.4s ease-in-out; 
+@font-face{
+	font-family: OpenSans;
+	src: url(OpenSans-Regular.ttf);
+}
+table{	
 	margin: 1em auto 1em auto;
 	border: 2px solid #ccc;
 	border-collapse: collapse;
-	width: 60%;
+	width: 70%;
 }
 th{
 	/*text-align: center;*/
@@ -30,7 +32,7 @@ td{
     text-align: left;
 }
 input[type=text],input[type="password"] {	 	
-	width: 30%;
+	width: 50%;
     box-sizing: border-box;
     border: 2px solid #ccc;
     border-radius: 4px;
@@ -125,11 +127,13 @@ input[type="submit"] {
 	text-align: left;
 }
 .header font{
+	font-family:OpenSans;
 	color: #4d4d4d;
 	font-size: 3.15em;
 }
 .content{
 	/*padding-top:20px;*/
+	font-family:OpenSans;
 	margin-top:60px;
 }
 .logout{
@@ -137,6 +141,7 @@ input[type="submit"] {
 	background-color: red;
 }
 ul {
+	font-family:OpenSans;
 	font-size: 1.5em;
     list-style-type: none;
     margin: 0;

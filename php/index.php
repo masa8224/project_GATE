@@ -15,7 +15,7 @@
     <a href="#" class="dropbtn">MAIN ></a>
     <div class="dropdown-content">
       <a href="stu.php">Student Database</a>
-      <a href="reg.php">RFID Registration</a>
+      <a href="reg.php">RFID Registration</a>      
     </div>
   </li>
 	<li><a>LOG</a></li>   
@@ -27,7 +27,7 @@
 
 <div class="content">
 <form method="get">
-  <table style="width:40%;">
+  <table>
     <tr>
       <th>FILTER > NAME:
       <input class="search" name="filter" type="text" id="filter" value="<?php echo $_GET["filter"];?>">
