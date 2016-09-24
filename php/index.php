@@ -27,7 +27,7 @@
 
 <div class="content">
 <form method="get">
-  <table style="width:40%;">
+  <table>
     <tr>
       <th>FILTER > NAME:
       <input class="search" name="filter" type="text" id="filter" value="<?php echo $_GET["filter"];?>">
