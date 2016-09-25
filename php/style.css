@@ -22,17 +22,18 @@ table{
 }
 th{
 	/*text-align: center;*/
-	padding: 2px 8px 2px 8px;
+	padding: 2px 8px 2px 8px;	
 	border: 2px solid #ccc;
-	background-color:lightgreen;
+	background-color: white;
 }
 td{
 	border: 2px solid #ccc;
 	padding: 10px;
     text-align: left;
+	background-color: white;
 }
 input[type=text],input[type="password"] {	 	
-	width: 50%;
+	width: 60%;
     box-sizing: border-box;
     border: 2px solid #ccc;
     border-radius: 4px;
@@ -49,6 +50,24 @@ input[type="submit"] {
     margin: 4px 2px;
     cursor: pointer;
 	font-size: 100%;
+	border-radius: 2px;
+	transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition-delay: 0.2s;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+	transition: background-color .3s;
+}
+input[type="submit"]:hover{
+	background-color: #27ae60;
+}
+input[type="submit"]:active{
+	box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
+     transition-delay: 0s;
+}
+form {
+    vertical-align:top;
+}
+input[type="text"]:focus{
+	border:2px solid lightblue;
 }
 .search{
 	background-size: fixed;
@@ -91,16 +110,47 @@ input[type="submit"] {
 .nortex{
 	text-align: left;
 }
+.card{
+	background-color: white;
+	width: 60em;
+	border: 2px solid #f1f1f1;
+	border-radius: 3px;
+	margin: 0.2em auto 0.6em auto;
+	padding: 0.21em 1.5em 0.21em 1.5em;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	display: flex;
+	overflow: hidden;
+}
+.card .content{
+	display:inline-block;
+}
+.card table{
+	width:100%;
+	margin:0 auto 0 auto;
+	border:none;
+	text-align:left;
+}
+.card table tr th{
+	border:none;
+}
+.nobd{
+	border:none;
+	background-color: white;
+}
 .login{
-	border: solid 1px black;
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    background-color: white;    
-    height: 300px;
-    margin-top: -200px;
-    width: 600px;
-    margin-left: -300px;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 600px;
+	hieght: 354px; 
+	background-color: lightgreen;
+	border-radius: 4px;
+	border: 2px solid #f1f1f1;
+	margin: 0.2em auto 0.6em auto;
+	padding: 0.21em;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	overflow: hidden;
+	display: block;
 }
 .login input[type="text"],input[type="password"]{
 	width: 100%;
@@ -134,10 +184,13 @@ input[type="submit"] {
 .content{
 	/*padding-top:20px;*/
 	font-family:OpenSans;
-	margin-top:60px;
+	margin-top:1.5em;
 }
 .logout{
 	float: right;
+	background-color: red;
+}
+.logout a:hover{
 	background-color: red;
 }
 ul {
@@ -163,7 +216,8 @@ li a, .dropbtn {
 }
 
 li a:hover, .dropdown:hover .dropbtn {
-    background-color: red;
+    background-color: yellow;
+	color: black;
 }
 
 li.dropdown {
@@ -215,7 +269,60 @@ li.dropdown {
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
-.normal{
-	float: left;
+.normal{	
+	display: inline;
 	text-align: left;
+}
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: red;
+    cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+    from {-webkit-transform: scale(0)}
+    to {-webkit-transform: scale(1)}
+}
+    
+@keyframes animatezoom {
+    from {transform: scale(0)}
+    to {transform: scale(1)}
 }

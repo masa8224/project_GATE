@@ -22,11 +22,23 @@
   </li>
 	<li><a>SETTING</a></li>   
 	<div style="float: right;">
-	<li class="logout"><a onclick="logout()" href="login.php">logout</a></li>
+	<li class="logout"><a href="logout.php">logout</a></li>
 	<li><a>Login as <?php echo $_COOKIE[user];?></a></li>  
 	</div>
 </ul>
 <div class="content">
+	<button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Test</button>
+	<div id="id01" class="modal">
+  
+  <form class="modal-content animate" action="action_page.php">
+    <br>
+				<input name="usr" type="text" placeholder="Username" required autofocus>				
+				<br>
+				<input name="passwd" type="password" placeholder="Password" required>
+				<br>
+				<input type="submit" value="Login">    
+  </form>
+</div>
 </div>
 <body>
 </html>

@@ -5,53 +5,85 @@
 ?>
 <html>
 <head>
-	<title>RFID LOG</title>
+	<title>STUDENT Database</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 <ul>
 	<li class="name">NTS RFID System</li> 	
 	<li class="dropdown">
-    <a href="#" class="dropbtn">MAIN ></a>
+    <a href="#" class="dropbtn">MAIN</a>
     <div class="dropdown-content">
       <a href="index.php">LOG</a>
       <a href="reg.php">RFID Registration</a>
+	  <a href="setting.php">Setting</a>
     </div>
-  </li>
+	</li>
+	<li><a>></a></li>
 	<li><a>STUDENT DATABASE</a></li>   
 	<div style="float: right;">
-	<li class="logout"><a onclick="logout()" href="login.php">logout</a></li>
+	<li class="logout"><a href="logout.php">logout</a></li>
 	<li><a>Login as <?php echo $_COOKIE[user];?></a></li>  
 	</div>
 </ul>
-
 <div class="content">
-<form method="get">
-  <table style="width:40%;">
-    <tr>
-      <th>FILTER > NAME:
-      <input class="search" name="filter" type="text" id="filter" value="<?php echo $_GET["filter"];?>">
-      <input type="submit" value="Search">	  
-	  <div class="normal">
-	  <label>Sort by</label><br>
-			 <input type="radio" name="sort" value="name" checked> Name<br>
-			 <input type="radio" name="sort" value="SID" > Student ID<br>
-      </div>
-	  </th>
-    </tr>
-  </table>
-</form>
-<hr style="height: 4px;">
+<div class="card">				
+	<table style="width:100%;margin:0 auto 0 auto;border:none;">
+	<form method="get">	
+	<tr>
+	<th style="width: 72%;border:none;">
+			FILTER > NAME:
+			<input class="search" name="filter" type="text" id="filter" value="<?php echo $_GET["filter"]?>">
+			<input type="submit" value="Search">
+	</th>	
+	<th style="width: 14%;text-align:left;border:none;">
+			<label>Sort by</label><br>	
+			<input id="_1" type="radio" name="sort" value="name" > Name		<br>	
+			<input id="_2" type="radio" name="sort" value="SID" > Student ID <br>
+	</th>		 
+	<th style="width: 14%;text-align:left;border:none;">	
+			<label>Sort by</label><br>	
+			<input id="_3" type="radio" name="by" value="ASC"> Ascend <br>
+			<input id="_4" type="radio" name="by" value="DESC" > Descend <br>			
+	</th>
+	</tr>
+	</form>
+	</table>	
+</div>
+<div class="card">
+<table><tr><th style="width:10%">
+	<div><font style="font-size:1.2em;;">Stat</font></div>
+	</th><th>
+		<label id="stat"></label>
+		<label>&nbsp;Student</label>
+	</th></tr></table>
+</div>
 <?php
 include("connect.php");   	
 $con=Connection();
+if ($_GET["sort"]){
+	if ($_GET["sort"]=='name'){
+		echo "<script>document.getElementById(\"_1\").checked = true;</script>";
+	}else if ($_GET["sort"]=='SID'){
+		echo "<script>document.getElementById(\"_2\").checked = true;</script>";
+	}
+	if ($_GET["by"]=='ASC'){
+		echo "<script>document.getElementById(\"_3\").checked = true;</script>";
+	}else if ($_GET["by"]=='DESC'){
+		echo "<script>document.getElementById(\"_4\").checked = true;</script>";
+	}
+}else{
+	echo "<script>document.getElementById(\"_1\").checked = true;</script>";
+	echo "<script>document.getElementById(\"_3\").checked = true;</script>";
+}
 if($_GET["filter"] or $_GET["date"] or $_GET["sort"]){
 	$filter=$_GET["filter"];
-	$sort="name";
+	$sort=$_GET["sort"];
+	$by=$_GET["by"];
 	$query="SELECT *
 	FROM Persons	
 	WHERE Persons.name LIKE '%".$filter."%'	
-	ORDER BY $sort DESC;";
+	ORDER BY $sort $by;";
 	$result = mysqli_query($con,$query);
 	if (mysqli_num_rows($result)) {
 		$rowcount=mysqli_num_rows($result);		
@@ -84,7 +116,9 @@ if($_GET["filter"] or $_GET["date"] or $_GET["sort"]){
 	FROM Persons	
 	ORDER BY name ASC;";
 	$result = mysqli_query($con,$query);
-	if (mysqli_num_rows($result)) {		
+	if (mysqli_num_rows($result)) {	
+		$rowcount=mysqli_num_rows($result);
+		echo "<script>document.getElementById(\"stat\").innerHTML=\"".$rowcount."\";</script>";
 		echo "<table>
 		<tr>		
 		<th>UID</th>
@@ -109,10 +143,8 @@ if($_GET["filter"] or $_GET["date"] or $_GET["sort"]){
 	mysqli_close($con);
 }
 ?>
+</div>
 <script type="text/javascript">
-function logout(){
-	document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-}
 </script>
 </body>
 </html>

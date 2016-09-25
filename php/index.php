@@ -12,36 +12,38 @@
 <ul>
 	<li class="name">NTS RFID System</li> 	
 	<li class="dropdown">
-    <a href="#" class="dropbtn">MAIN ></a>
+    <a href="#" class="dropbtn">MAIN</a>
     <div class="dropdown-content">
       <a href="stu.php">Student Database</a>
-      <a href="reg.php">RFID Registration</a>      
+      <a href="reg.php">RFID Registration</a> 
+	  <a href="setting.php">Setting</a>	  
     </div>
-  </li>
-	<li><a>LOG</a></li>   
-	<div style="float: right;">
-	<li class="logout"><a onclick="logout()" href="login.php">logout</a></li>
+	</li>
+	<li><a>></a></li>
+	<li><a>LOG</a></li>
+    <div style="float: right;">
+	<li class="logout"><a href="logout.php">logout</a></li>
 	<li><a>Login as <?php echo $_COOKIE[user];?></a></li>  
 	</div>
 </ul>
 
 <div class="content">
-<form method="get">
-  <table>
+<div class="card">
+<table style="width:100%;margin:0 auto 0 auto;border:none;">
+<form method="get">  
     <tr>
-      <th>FILTER > NAME:
+      <th class="nobd">FILTER > NAME:
       <input class="search" name="filter" type="text" id="filter" value="<?php echo $_GET["filter"];?>">
-      <input type="submit" value="Search">	  
-	  <label class="advance" for="_1">Advance Filter</label>
-	  <input id="_1" type="checkbox"> 
-	  <div class="normal">
-			<input type="date" name="date" value="<?php echo $_GET["date"];?>">
-      </div>
+      <input type="submit" value="Search">	  	  
 	  </th>
-    </tr>
-  </table>
+	  <th class="nobd" style="line-height: 6px;">
+		<?php echo date("d F Y");?><br>
+		<p id="time"></p>
+	  </th>
+    </tr>  
 </form>
-<hr style="height: 4px;">
+</table>
+</div>
 <?php
 include("connect.php");   	
 $con=Connection();
@@ -124,8 +126,20 @@ if($_GET["filter"] or $_GET["date"]){
 }
 ?>
 <script type="text/javascript">
-function logout(){
-	document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+setInterval(Timer(),1000);
+function Timer() {
+   var dt=new Date()
+   var hours = dt.getHours();
+   var min = dt.getMinutes();
+   var sec = dt.getSeconds();
+   if (min < 10) {
+    min = "0" + min;
+   }
+   if (sec<10){
+	sec = "0" + sec;	
+   }
+   document.getElementById('time').innerHTML=hours+":"+min+":"+sec;
+   setTimeout("Timer()",1000);
 }
 </script>
 </body>

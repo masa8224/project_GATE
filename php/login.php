@@ -3,15 +3,13 @@
 	<title>Login</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
-	<table class="login">
-		<tr>
-			<th>
+	<div class="login">
 			<div class="header">
 			<img src="nts-logo.png" class="logo">
-			<font>NTS Parking lot RFID System</font>
+			<font>Narathiwat School RFID System</font>
 			</div>
-			<br><br><br><br><br><br><br>
-			<div style="display: block;text-align: left;">
+			<br><br><br>		
+			<div style="display: block;text-align: left;">			
 			<form method="post">				
 				<br>
 				<input name="usr" type="text" placeholder="Username" required autofocus>				
@@ -21,9 +19,7 @@
 				<input type="submit" value="Login">
 			</form>
 			</div>
-			</th>
-		</tr>
-	</table>
+	</div>
 <?php 
 	$cookie_name = "user";
 	if (isset($_COOKIE[$cookie_name])){

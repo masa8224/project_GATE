@@ -79,8 +79,7 @@ void loop(){
   if ( ! mfrc522.PICC_ReadCardSerial()) {
     return;
   }  
-  digitalWrite(13,HIGH);
-  digitalWrite(6,HIGH);  
+  digitalWrite(13,HIGH);    
   for (int i = 0; i < 4; i++) {  //
     readCard[i] = mfrc522.uid.uidByte[i];
   }
@@ -108,6 +107,7 @@ void loop(){
   dataString = "";
   data ="";
   Serial.println("--------------------------------");
+  digitalWrite(6,HIGH);
   delay(200);
   digitalWrite(6,LOW);
   delay(300);

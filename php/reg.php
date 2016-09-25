@@ -11,15 +11,17 @@
 <ul>
 	<li class="name">NTS RFID System</li> 	
 	<li class="dropdown">
-    <a href="#" class="dropbtn">MAIN ></a>
+    <a href="#" class="dropbtn">MAIN</a>
     <div class="dropdown-content">
-      <a href="stu.php">Student Database</a>
-      <a href="index.php">LOG</a>
+	  <a href="index.php">LOG</a>
+      <a href="stu.php">Student Database</a>      
+	  <a href="setting.php">Setting</a>
     </div>
   </li>
+	<li><a>></a></li>
 	<li><a>RFID REGISTRATION FORM</a></li>   
 	<div style="float: right;">
-	<li class="logout"><a onclick="logout()" href="login.php">logout</a></li>
+	<li class="logout"><a href="logout.php">logout</a></li>
 	<li><a>Login as <?php echo $_COOKIE[user];?></a></li>  
 	</div>
 </ul>
@@ -42,10 +44,6 @@
     <br>    
     <input type="submit">
 </form>
-<script type="text/javascript">
-function logout(){
-	document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-}
 </script>
 <body>
 </html>
