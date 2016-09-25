@@ -15,11 +15,15 @@
 				<input name="usr" type="text" placeholder="Username" required autofocus>				
 				<br>
 				<input name="passwd" type="password" placeholder="Password" required>
-				<br>
-				<input type="submit" value="Login">
+				<br>				
+				<input type="submit" value="Login" style="width: 100%;margin:5px 0px 5px 0px;">
 			</form>
 			</div>
+			<div class="loginend">
+				<span>If you forgot your password. Please contact Administrator.</span>
+			</div>
 	</div>
+	
 <?php 
 	$cookie_name = "user";
 	if (isset($_COOKIE[$cookie_name])){
