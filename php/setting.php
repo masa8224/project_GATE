@@ -27,17 +27,20 @@
 	</div>
 </ul>
 <div class="content">
-	<button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Test</button>
-	<div id="id01" class="modal">
-  
-  <form class="modal-content animate" action="action_page.php">
-    <br>
-				<input name="usr" type="text" placeholder="Username" required autofocus>				
-				<br>
-				<input name="passwd" type="password" placeholder="Password" required>
-				<br>
-				<input type="submit" value="Login">    
-  </form>
+	<button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Change Password</button>
+	<div id="id01" class="modal" style="widht:30%;">
+  <div class="modal-content animate" >
+  <h1>Change Password</h1>
+  <form action="changepasswd.php" method="post">
+    <br>				
+	<input name="passwd" type="password" placeholder="old password" required>
+	<input name="newpasswd" type="password" placeholder="new password" required>
+	<input name="repasswd" type="password" placeholder="retype new password" required>
+	<br>
+	<input type="submit" value="Change Password">    
+	<span><button onclick="document.getElementById('id01').style.display='none'" style="float:right;">Cancle</button></span>
+  </form>  	
+  </div>
 </div>
 </div>
 <body>
