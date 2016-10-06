@@ -7,7 +7,8 @@
 <head>
 	<title>RFID LOG</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
-</head>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	</head>
 <body>
 <ul>
 	<li class="name">NTS RFID System</li> 	
@@ -44,6 +45,10 @@
 </form>
 </table>
 </div>
+<div class="card">
+	<div id="chart"></div>
+</div>
+<div class="card cardtable">
 <?php
 include("connect.php");   	
 $con=Connection();
@@ -122,9 +127,43 @@ if($_GET["filter"] or $_GET["date"]){
 	}else{
 		echo "<h1 class=\"center\">No result</h1>";		
 	}	
-	mysqli_close($con);
+	//mysqli_close($con);	
+	$query ="SELECT COUNT(1) AS entries, DATE(date) as date FROM RFID GROUP BY DATE(date) LIMIT 0 , 30";
+	$graph = mysqli_query($con,$query);
+	echo "<script type=\"text/javascript\">
+      google.charts.load('current', {'packages':['line']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+      data.addColumn('date', 'Day');
+      data.addColumn('number', 'Students');
+      data.addRows([";
+	while($row = mysqli_fetch_array($graph)){
+		$sqldate = $row['date'];
+		$dateraw = strtotime($sqldate);
+		$date = date("Y m d",$dateraw);
+		echo "[new Date('".$date."'),".$row['entries']."],";
+	}
+    echo "]);
+	var options = {
+        chart: {
+          title: 'Students that use the parking lot',
+        },
+        width: 900,
+        height: 500
+		
+      };
+
+      var chart = new google.charts.Line(document.getElementById('chart'));
+
+      chart.draw(data, options);
+      }
+    </script>";
+	
 }
 ?>
+</div>
 <script type="text/javascript">
 setInterval(Timer(),1000);
 function Timer() {
