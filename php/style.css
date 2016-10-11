@@ -140,9 +140,12 @@ input[type="text"]:focus{
 	border:none;
 	background-color: white;
 }
-.content{
+.container{
 	padding:50px;
 	margin-top:50px;
+}
+.content{	
+	overflow: auto;
 }
 .login{
 	position: relative;

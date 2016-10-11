@@ -33,13 +33,10 @@
 		echo "<script>document.getElementById('pagename').innerHTML='".$xml->$pageid."';</script>";
 	?>
 </ul>
-<div class="content">
-<div class="tabsheader">
-<ul>
-	<li><a class="tabOn" onclick="opentabs(event,'dashboard');">Dashboard</a></li>
-	<li><a class="tabOn" onclick="opentabs(event,'log');">Log</a></li>	
-</ul>
+<div class="container">
+
 </div>
+<div class="content">
 <div id="dashboard" class="tabs">
 <div style="display: flex;">
 <div class="card animate" style="width: 58%;margin: 1em;display: block;">
@@ -187,8 +184,8 @@ if($_GET["filter"] or $_GET["date"]){
 	
 }
 
-?></div></div>
 ?>
+</div>
 </div>
 </div>
 </div>
