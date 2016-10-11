@@ -133,14 +133,22 @@ input[type="text"]:focus{
 .card table tr th{
 	border:none;
 }
+.cardtable table tr th{
+	border: 2px solid #ccc;
+}
 .nobd{
 	border:none;
 	background-color: white;
+}
+.content{
+	padding:50px;
+	margin-top:50px;
 }
 .login{
 	position: relative;
 	top: 50%;
 	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
 	width: 600px;
 	hieght: 354px; 
 	background-color: lightgreen;
@@ -208,6 +216,9 @@ ul {
     padding: 0;
     overflow: hidden;
     background-color: #333;
+	position: fixed;
+	top: 0;
+    width: 100%;
 }
 
 li {
@@ -219,10 +230,11 @@ li a, .dropbtn {
     color: white;
     text-align: center;
     padding: 14px 16px;
-    text-decoration: none;
+    text-decoration: none;	
 }
 
 li a:hover, .dropdown:hover .dropbtn {
+	transition-duration: 0.4s;
     background-color: yellow;
 	color: black;
 }
@@ -232,6 +244,7 @@ li.dropdown {
 }
 
 .dropdown-content {
+	transition-duration: 0.4s;
     display: none;
     position: absolute;
     background-color: #f9f9f9;

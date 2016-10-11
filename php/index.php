@@ -44,6 +44,7 @@
 </form>
 </table>
 </div>
+<div class="card cardtable">
 <?php
 include("connect.php");   	
 $con=Connection();
@@ -124,7 +125,7 @@ if($_GET["filter"] or $_GET["date"]){
 	}	
 	mysqli_close($con);
 }
-?>
+?></div></div>
 <script type="text/javascript">
 setInterval(Timer(),1000);
 function Timer() {
