@@ -45,12 +45,9 @@
 </form>
 </table>
 </div>
-<<<<<<< HEAD
-=======
 <div class="card">
 	<div id="chart"></div>
 </div>
->>>>>>> 08632652b502f5ef84719b6e79b25dbfc701b8af
 <div class="card cardtable">
 <?php
 include("connect.php");   	
@@ -165,12 +162,10 @@ if($_GET["filter"] or $_GET["date"]){
     </script>";
 	
 }
-<<<<<<< HEAD
+
 ?></div></div>
-=======
 ?>
 </div>
->>>>>>> 08632652b502f5ef84719b6e79b25dbfc701b8af
 <script type="text/javascript">
 setInterval(Timer(),1000);
 function Timer() {
