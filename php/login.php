@@ -20,7 +20,7 @@
 			</form>
 			</div>
 			<div class="loginend">
-				<span>If you forgot your password. Please contact Administrator.</span>
+				<span style="font-family:OpenSans;float: right;">Forgot your password? Please contact Administrator.</span>
 			</div>
 	</div>
 	

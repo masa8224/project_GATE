@@ -28,6 +28,9 @@ void setup()
   lcd.begin();  
   Ethernet.begin(mac,ip); 
   mfrc522.PCD_Init();
+  if (!rtc.begin()){
+    Serial.println("Error!: RTC not found");
+  }
   //
   Serial.println("Initializing...");
   lcd.print("Init..."); 
@@ -47,7 +50,7 @@ void setup()
   lcd.setCursor(0,0);
   lcd.print("SD FOUND"); 
   //Server Check
-  if (client.connect("192.168.1.104",80)) { 
+  if (client.connect("192.168.1.107",80)) { 
     lcd.setCursor(0,1);
     Serial.println("Server Connected!");    
     lcd.print("Server online");
@@ -130,7 +133,7 @@ void WriteToSD(){
 }
 void postData(){
   Serial.println(data);
-  if (client.connect("192.168.1.104",80)) { 
+  if (client.connect("192.168.1.107",80)) { 
     Serial.println("Server Connected!");
     client.println("POST /add.php HTTP/1.1"); 
     client.println("Host: 192.168.1.108"); 
