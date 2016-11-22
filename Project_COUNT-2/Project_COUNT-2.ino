@@ -6,13 +6,12 @@
 #include <SD.h>
 #include <LiquidCrystal_I2C.h>
 #define SS_PIN 53
-#define RST_PIN 5
+#define RST_PIN 3
 LiquidCrystal_I2C lcd (0x27,20,4);
 byte readCard[4];
 byte mac[] = { 0xAA, 0xBB, 0xCC, 0xDD, 0xEF, 0x02 };  
 IPAddress ip(192, 168, 1, 107); 
 byte server[] = { 192,168,0,108 }; 
-
 String data;
 String dataString;
 MFRC522 mfrc522(SS_PIN, RST_PIN);
@@ -29,6 +28,7 @@ void setup()
   lcd.begin();  
   Ethernet.begin(mac,ip); 
   mfrc522.PCD_Init();
+  mfrc522.PCD_DumpVersionToSerial();
   if (!rtc.begin()){
     Serial.println("Error!: RTC not found");
   }
