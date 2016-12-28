@@ -5,43 +5,20 @@ void setup() {
   pinMode(9, OUTPUT);
   pinMode(3, INPUT);
   pinMode(4, INPUT);
-  pinMode(6, INPUT);
+  pinMode(10, OUTPUT);
+  pinMode(11, OUTPUT);
   digitalWrite(9,HIGH);
   digitalWrite(8,HIGH);
 }
-void loop() {/*
-  if (digitalRead(4)) {
-    if (analogRead(A1) > 500) {
-      Serial.println("9!");
-      digitalWrite(9, LOW);
-    } else if(!digitalRead(4)) {
-      digitalWrite(9, HIGH);
-    }
-  } else {
-    digitalWrite(9, HIGH);
-  }
-  
-  if (digitalRead(3)) {
-  if (analogRead(A0) > 500) {
-      Serial.println("8!");
-      digitalWrite(8, LOW);
-  }else if(!digitalRead(3)) {
-      digitalWrite(8, HIGH);
-    }
-  } else {
-    digitalWrite(8, HIGH);
-  }
-  */
-  if (!digitalRead(4)){
-    digitalWrite(9,HIGH);
-  }
-  if (!digitalRead(3)){
-    digitalWrite(8,HIGH);
-  }
-  if (analogRead(A0)>500){
+void loop() {  
+  digitalWrite(10,HIGH);
+  digitalWrite(11,LOW);
+  if (digitalRead(13)==HIGH){
     if (digitalRead(4)){
       Serial.println("Open");
       digitalWrite(9,LOW);
+      digitalWrite(10,LOW);
+      digitalWrite(11,HIGH);
     
     while (digitalRead(4)==HIGH){}
       digitalWrite(9,HIGH);    
@@ -56,5 +33,4 @@ void loop() {/*
     digitalWrite(8,HIGH);
   }
   }
-
 }

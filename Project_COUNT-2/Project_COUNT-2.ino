@@ -10,15 +10,17 @@
 LiquidCrystal_I2C lcd (0x27,20,4);
 byte readCard[4];
 byte mac[] = { 0xAA, 0xBB, 0xCC, 0xDD, 0xEF, 0x02 };  
-IPAddress ip(192, 168, 1, 107); 
-byte server[] = { 192,168,0,108 }; 
+IPAddress ip(192, 168, 10, 45); 
 String data;
 String dataString;
+String readString;
+EthernetClient client;
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 RTC_DS1307 rtc;
-EthernetClient client;
 void setup()
 {   
+  String date = "";
+  String timenow = "";
   pinMode(13,OUTPUT);
   pinMode(6,OUTPUT); 
   pinMode(7,OUTPUT);  
@@ -39,19 +41,26 @@ void setup()
   if (!rtc.begin()){
     Serial.println("Error!: RTC not found");
   }
+  DateTime now = rtc.now();
+  date = String(now.year()) +"-"+String(now.month())+"-" +String(now.day()) ;
+  timenow = String(now.hour()) + ":"+ String(now.minute())+ ":"+ String(now.second());
+  Serial.println(date);
+  Serial.println(timenow);
   //SD Check
   if (!SD.begin(4)) {
       Serial.println("ERROR - SD card initialization failed!");     
       lcd.clear();
       lcd.print("Init FAILED!");  
       return;    
+  }else{
+    Serial.println("SUCCESS - SD card initialized.");
   }
-  Serial.println("SUCCESS - SD card initialized.");
+  
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("SD FOUND"); 
   //Server Check
-  if (client.connect("192.168.1.109",80)) { 
+  if (client.connect("192.168.10.4",80)) { 
     lcd.setCursor(0,1);
     Serial.println("Server Connected!");    
     lcd.print("Server online");
@@ -78,13 +87,16 @@ void loop(){
   String lcdString = "";
   String date = "";
   String timenow = "";
+  digitalWrite(7,HIGH);
   if ( ! mfrc522.PICC_IsNewCardPresent()) {   
     return;
+   
   }
   if ( ! mfrc522.PICC_ReadCardSerial()) {
     return;
   }  
-  digitalWrite(13,HIGH);    
+  digitalWrite(7,LOW);  
+  digitalWrite(13,HIGH);
   for (int i = 0; i < 4; i++) {  //
     readCard[i] = mfrc522.uid.uidByte[i];
   }
@@ -109,14 +121,22 @@ void loop(){
   lcd.clear();
   lcd.print(lcdString);
   postData();
+  while (client.available()) {
+    char c = client.read();   
+    readString += c;  
+  }
+  Serial.println(readString);
+  if (client.connected()) { 
+    client.stop();  
+  }
   dataString = "";
   data ="";
-  Serial.println("--------------------------------");
-  digitalWrite(13,HIGH);
+  Serial.println("--------------------------------");  
   delay(500);
   digitalWrite(13,LOW);
   gateOpen();
   lcd.clear();
+  delay(1500);
   lcd.print("Stand By...");
 }
 void WriteToSD(){
@@ -133,7 +153,7 @@ void WriteToSD(){
 }
 void postData(){
   Serial.println(data);
-  if (client.connect("192.168.1.109",80)) { 
+  if (client.connect("192.168.10.4",80)) { /*
     Serial.println("Server Connected!");
     client.println("POST /add.php HTTP/1.1"); 
     client.println("Host: 192.168.1.109"); 
@@ -141,14 +161,19 @@ void postData(){
     client.print("Content-Length: "); 
     client.println(data.length()); 
     client.println(); 
-    client.print(data); 
+    client.print(data); */
+    client.print("GET /add.php");  
+    client.print("?"); 
+    client.print(data);
+    client.print(" HTTP/1.1"); 
+    client.println();
+    client.println("Host: 192.168.10.4");
+    client.println("Connection: close");
+    client.println();
     Serial.println("POST CMPL!");
   }else{
     Serial.println("POST Failed or server offline");
-  }
-  if (client.connected()) { 
-    client.stop();  
-  }
+  }    
   return;
 }
 void gateOpen(){

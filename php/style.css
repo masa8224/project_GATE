@@ -81,7 +81,7 @@ input[type="text"]:focus{
 	text-align: center;
 }
 .unkn{
-	background-color: red;
+	background-color: blue;
 	font-weight: 600;
 	text-align: center;
 	font-style: italic;
@@ -114,7 +114,7 @@ input[type="text"]:focus{
 	background-color: white;
 	width: 60em;
 	border: 2px solid #f1f1f1;
-	border-radius: 3px;
+	border-radius: 10px;
 	margin: 0.2em auto 0.6em auto;
 	padding: 0.21em 1.5em 0.21em 1.5em;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
