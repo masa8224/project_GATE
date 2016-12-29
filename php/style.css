@@ -1,5 +1,5 @@
 body{
-	background-color: lightblue;
+	background-color: lightgreen;
 	margin: 0;
 }
 h1{
@@ -81,13 +81,13 @@ input[type="text"]:focus{
 	text-align: center;
 }
 .unkn{
-	background-color: blue;
+	background-color: #e74c3c;
 	font-weight: 600;
 	text-align: center;
 	font-style: italic;
 }
 .re{
-	background-color: #00ff00;
+	background-color: #2ecc71;
 	font-weight: 600;
 	text-align: center;
 }
@@ -112,7 +112,7 @@ input[type="text"]:focus{
 }
 .card{
 	background-color: white;
-	width: 60em;
+	width: 76em;
 	border: 2px solid #f1f1f1;
 	border-radius: 10px;
 	margin: 0.2em auto 0.6em auto;
@@ -141,6 +141,8 @@ input[type="text"]:focus{
 	background-color: white;
 }
 .container{
+	font-family: OpenSans;
+	
 	padding:50px;
 	margin-top:50px;
 }
@@ -152,10 +154,7 @@ input[type="text"]:focus{
 	top: 50%;
 	transform: translateY(-50%);
 	-webkit-transform: translateY(-50%);
-<<<<<<< HEAD
-=======
 	-ms-transform: translateY(-50%);
->>>>>>> 2b8152d4977f574eb58ad905b1b2a1cc94019251
 	width: 600px;
 	hieght: 354px; 
 	background-color: lightgreen;
@@ -215,13 +214,20 @@ input[type="text"]:focus{
 .logout a:hover{
 	background-color: red;
 }
+.loginend a{
+	text-decoration: none;
+	border: 2px solid red;
+	padding: 5px;
+	border-radius: 2px;
+	background: lightcoral;
+}
 ul {
 	font-family:OpenSans;
 	font-size: 1.5em;
     list-style-type: none;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow: visible;
     background-color: #333;
 	position: fixed;
 	top: 0;
@@ -241,6 +247,9 @@ button{
     transition-delay: 0.2s;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
 	transition: background-color .3s;
+}
+button:disabled{
+	background-color: red;
 }
 li {
     float: left;
@@ -278,9 +287,7 @@ li.dropdown {
     font-size: 100%;
 	border-right:1px solid #ccc;
 } 
-.tabOn{
-	
-}
+
 .yellow{
 	background-color: yellow;
 }

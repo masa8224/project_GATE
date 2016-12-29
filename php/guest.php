@@ -3,35 +3,16 @@
 	<title>RFID LOG</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<script type="text/javascript" src="script.js"></script>
-	<script>
-	function table(){
-		var xhr = new XMLHttpRequest();				
-		xhr.open('GET', 'table.php', true);
-		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-		xhr.onload = function () {
-			var res = this.responseText;
-			var entries = res.slice(8,12);
-			str = entries.replace(/\s/g, '');
-			document.getElementById('count').innerHTML=str;
-			var ta = res.slice(14);	
-			document.getElementById('Log').innerHTML = ta;				
-		};	
-		
-		xhr.send("a");	
-	</script>	
+	
 </head>
-<body onload="table()">
+<body>
 <ul>	
 	<li class="name">NTS RFID System</li> 	
 	<li class="dropdown">    
 	<li><a>GUEST MODE</a></li>	
     <div style="float: right;">
 	<li class="logout"><a href="login.php">login</a></li>	  
-	</div>
-	<?php
-		$xml=simplexml_load_file("page.xml") or die("Error: Cannot create object");		
-		echo "<script>document.getElementById('pagename').innerHTML='".$xml->$pageid."';</script>";
-	?>
+	</div>	
 	
 </ul>
 <div class="container" style="font-family: OpenSans;margin-top:25px;padding-top: 50px;">
@@ -59,7 +40,7 @@
 </table>
 </div>
 
-<div id="Log" class="card cardtable" style="width: 90%;" >
+<div id="Log"class="card cardtable" style="display: block;" >
 <?php
 include("connect.php");   	
 $con=Connection();
@@ -108,8 +89,24 @@ if($_GET["filter"] or $_GET["date"]){
 </div>
 </div>
 <script type="text/javascript">
+function SQLTable(){
+		var xhr = new XMLHttpRequest();	
+		console.log("Hello");
+		xhr.open('GET', 'table.php', true);
+		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		xhr.onload = function () {
+			var res = this.responseText;
+			var entries = res.slice(8,12);
+			str = entries.replace(/\s/g, '');
+			document.getElementById('count').innerHTML= str;
+			var ta = res.slice(14);	
+			document.getElementById('Log').innerHTML = ta;				
+		};	
+		
+		xhr.send("a");	
+	}
 setInterval(Timer(),500);	
-setInterval(check(),1000);	
+setInterval(SQLTable,1000);	
 </script>
 </body>
 </html>

@@ -8,12 +8,14 @@
 #define SS_PIN 53
 #define RST_PIN 3 
 LiquidCrystal_I2C lcd (0x27,20,4);
+char server[] = "192.168.88.250";
 byte readCard[4];
 byte mac[] = { 0xAA, 0xBB, 0xCC, 0xDD, 0xEF, 0x02 };  
-IPAddress ip(192, 168, 10, 45); 
+IPAddress ip(192, 168, 88, 45); 
 String data;
 String dataString;
 String readString;
+int isOK; 
 EthernetClient client;
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 RTC_DS1307 rtc;
@@ -60,7 +62,7 @@ void setup()
   lcd.setCursor(0,0);
   lcd.print("SD FOUND"); 
   //Server Check
-  if (client.connect("192.168.10.4",80)) { 
+  if (client.connect(server,80)) { 
     lcd.setCursor(0,1);
     Serial.println("Server Connected!");    
     lcd.print("Server online");
@@ -82,7 +84,8 @@ void setup()
   digitalWrite(6,LOW);  
 }
 
-void loop(){  
+void loop(){ 
+  
   dataString = "";  
   String lcdString = "";
   String date = "";
@@ -119,24 +122,27 @@ void loop(){
   dataString = date +"  "+ timenow + " > " + String(combine);
   WriteToSD();
   lcd.clear();
-  lcd.print(lcdString);
+  
   postData();
-  while (client.available()) {
-    char c = client.read();   
-    readString += c;  
-  }
-  Serial.println(readString);
-  if (client.connected()) { 
-    client.stop();  
-  }
+  
   dataString = "";
   data ="";
   Serial.println("--------------------------------");  
-  delay(500);
   digitalWrite(13,LOW);
+  if (isOK==1){
+     lcd.setCursor(0,2);
+     lcd.print("ACCESS GRANTED");
+  }else{
+    lcd.setCursor(0,2);
+     lcd.print("ACCESS DENIED");
+  }
+ 
   gateOpen();
-  lcd.clear();
+  readString = "";
+  isOK = 0;
+  
   delay(1500);
+  lcd.clear();
   lcd.print("Stand By...");
 }
 void WriteToSD(){
@@ -153,34 +159,44 @@ void WriteToSD(){
 }
 void postData(){
   Serial.println(data);
-  if (client.connect("192.168.10.4",80)) { /*
-    Serial.println("Server Connected!");
-    client.println("POST /add.php HTTP/1.1"); 
-    client.println("Host: 192.168.1.109"); 
-    client.println("Content-Type: application/x-www-form-urlencoded"); 
-    client.print("Content-Length: "); 
-    client.println(data.length()); 
-    client.println(); 
-    client.print(data); */
-    client.print("GET /add.php");  
-    client.print("?"); 
+  if (client.connect(server,80)) {     
+    client.print("GET /add.php?");      
     client.print(data);
     client.print(" HTTP/1.1"); 
     client.println();
     client.println("Host: 192.168.10.4");
     client.println("Connection: close");
     client.println();
-    Serial.println("POST CMPL!");
+    Serial.println("GET CMPL!");
   }else{
-    Serial.println("POST Failed or server offline");
-  }    
+    Serial.println("GET Failed or server offline");
+  }  
+  delay(1000);  
+  while (client.available()) {
+    char c = client.read();       
+    readString += c;  
+  }
+  String checkStr = readString.substring(170);
+  Serial.println(checkStr); 
+  if (checkStr.indexOf('R')>1){
+     isOK = 1;
+     Serial.println("ACCESS GRANTED");     
+  }else{
+  if (checkStr.indexOf('N')>1){
+     isOK = 0;
+     Serial.println("ACCESS DENIED");     
+  }
+  }
+  client.stop();    
   return;
 }
 void gateOpen(){
+  if(isOK==1){
   digitalWrite(6,HIGH);
   delay(100);
   digitalWrite(6,LOW);  
   return;
+  }
 }
 
 
