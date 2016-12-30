@@ -9,29 +9,7 @@ void setup() {
   digitalWrite(9,HIGH);
   digitalWrite(8,HIGH);
 }
-void loop() {/*
-  if (digitalRead(4)) {
-    if (analogRead(A1) > 500) {
-      Serial.println("9!");
-      digitalWrite(9, LOW);
-    } else if(!digitalRead(4)) {
-      digitalWrite(9, HIGH);
-    }
-  } else {
-    digitalWrite(9, HIGH);
-  }
-  
-  if (digitalRead(3)) {
-  if (analogRead(A0) > 500) {
-      Serial.println("8!");
-      digitalWrite(8, LOW);
-  }else if(!digitalRead(3)) {
-      digitalWrite(8, HIGH);
-    }
-  } else {
-    digitalWrite(8, HIGH);
-  }
-  */
+void loop() {
   if (!digitalRead(4)){
     digitalWrite(9,HIGH);
   }
@@ -56,5 +34,4 @@ void loop() {/*
     digitalWrite(8,HIGH);
   }
   }
-
 }

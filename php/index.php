@@ -53,10 +53,10 @@
 <div id="log" class="tabs" style="display:none;">
 <div class="card">
 <table style="width:100%;margin:0 auto 0 auto;border:none;">
-<form method="get">  
+<form>  
     <tr>
       <th class="nobd">FILTER > NAME:
-      <input class="search" name="filter" type="text" id="filter" value="<?php echo $_GET["filter"];?>">
+      <input id="test" class="search" name="filter" type="text" id="filter" value="<?php echo $_GET["filter"];?>">
       <input type="submit" value="Search">	  	  
 	  </th>
 	  <th class="nobd" style="line-height: 6px;">
@@ -194,6 +194,19 @@ if($_GET["filter"] or $_GET["date"]){
 		function load(){
 			opentabs(event,'dashboard');
 		}
+function showUser() {   
+		var str = document.getElementById("test").value;
+        if (window.XMLHttpRequest) {            
+        xmlhttp = new XMLHttpRequest();        
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("txtHint").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET","AjaxPage.php?q="+str,true);
+        xmlhttp.send();
+    }
+}
 </script>
 </body>
 </html>

@@ -1,0 +1,29 @@
+<html>
+<head>
+<script>
+function showUser() {   
+		var str = document.getElementById("test").value
+        if (window.XMLHttpRequest) {            
+        xmlhttp = new XMLHttpRequest();        
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("txtHint").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET","AjaxPage.php?q="+str,true);
+        xmlhttp.send();
+    }
+}
+</script>
+</head>
+<body>
+
+<form onsubmit="myFunction()">
+
+</form>
+<br>
+<button value="26775" onclick="showUser(this.value)">Test</button>
+<div id="txtHint"><b>Person info will be listed here...</b></div>
+
+</body>
+</html>
