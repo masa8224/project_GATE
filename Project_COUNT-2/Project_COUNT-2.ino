@@ -6,19 +6,28 @@
 #include <SD.h>
 #include <LiquidCrystal_I2C.h>
 #define SS_PIN 53
-#define RST_PIN 5
+#define RST_PIN 3 
 LiquidCrystal_I2C lcd (0x27,20,4);
+char server[] = "192.168.88.250";
 byte readCard[4];
 byte mac[] = { 0xAA, 0xBB, 0xCC, 0xDD, 0xEF, 0x02 };  
+<<<<<<< HEAD
 IPAddress ip(192, 168, 1, 107); 
 byte server[] = { 192,168,10,4 }; 
+=======
+IPAddress ip(192, 168, 88, 45); 
+>>>>>>> ece32e8e01dd1d0b0b77305e7fbddd08dfa30815
 String data;
 String dataString;
+String readString;
+int isOK; 
+EthernetClient client;
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 RTC_DS1307 rtc;
-EthernetClient client;
 void setup()
 {   
+  String date = "";
+  String timenow = "";
   pinMode(13,OUTPUT);
   pinMode(6,OUTPUT); 
   pinMode(7,OUTPUT);  
@@ -28,6 +37,7 @@ void setup()
   lcd.begin();  
   Ethernet.begin(mac,ip); 
   mfrc522.PCD_Init();
+  mfrc522.PCD_DumpVersionToSerial();
   if (!rtc.begin()){
     Serial.println("Error!: RTC not found");
   }
@@ -38,19 +48,26 @@ void setup()
   if (!rtc.begin()){
     Serial.println("Error!: RTC not found");
   }
+  DateTime now = rtc.now();
+  date = String(now.year()) +"-"+String(now.month())+"-" +String(now.day()) ;
+  timenow = String(now.hour()) + ":"+ String(now.minute())+ ":"+ String(now.second());
+  Serial.println(date);
+  Serial.println(timenow);
   //SD Check
   if (!SD.begin(4)) {
       Serial.println("ERROR - SD card initialization failed!");     
       lcd.clear();
       lcd.print("Init FAILED!");  
       return;    
+  }else{
+    Serial.println("SUCCESS - SD card initialized.");
   }
-  Serial.println("SUCCESS - SD card initialized.");
+  
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("SD FOUND"); 
   //Server Check
-  if (client.connect("192.168.1.109",80)) { 
+  if (client.connect(server,80)) { 
     lcd.setCursor(0,1);
     Serial.println("Server Connected!");    
     lcd.print("Server online");
@@ -72,18 +89,22 @@ void setup()
   digitalWrite(6,LOW);  
 }
 
-void loop(){  
+void loop(){ 
+  
   dataString = "";  
   String lcdString = "";
   String date = "";
   String timenow = "";
+  digitalWrite(7,HIGH);
   if ( ! mfrc522.PICC_IsNewCardPresent()) {   
     return;
+   
   }
   if ( ! mfrc522.PICC_ReadCardSerial()) {
     return;
   }  
-  digitalWrite(13,HIGH);    
+  digitalWrite(7,LOW);  
+  digitalWrite(13,HIGH);
   for (int i = 0; i < 4; i++) {  //
     readCard[i] = mfrc522.uid.uidByte[i];
   }
@@ -106,17 +127,26 @@ void loop(){
   dataString = date +"  "+ timenow + " > " + String(combine);
   WriteToSD();
   lcd.clear();
-  lcd.print(lcdString);
+  
   postData();
+  
   dataString = "";
   data ="";
-  Serial.println("--------------------------------");
-  digitalWrite(6,HIGH);
-  delay(200);
-  digitalWrite(6,LOW);
-  delay(300);
+  Serial.println("--------------------------------");  
   digitalWrite(13,LOW);
+  if (isOK==1){
+     lcd.setCursor(0,2);
+     lcd.print("ACCESS GRANTED");
+  }else{
+    lcd.setCursor(0,2);
+     lcd.print("ACCESS DENIED");
+  }
+ 
   gateOpen();
+  readString = "";
+  isOK = 0;
+  
+  delay(1500);
   lcd.clear();
   lcd.print("Stand By...");
 }
@@ -134,29 +164,44 @@ void WriteToSD(){
 }
 void postData(){
   Serial.println(data);
-  if (client.connect("192.168.1.109",80)) { 
-    Serial.println("Server Connected!");
-    client.println("POST /add.php HTTP/1.1"); 
-    client.println("Host: 192.168.1.109"); 
-    client.println("Content-Type: application/x-www-form-urlencoded"); 
-    client.print("Content-Length: "); 
-    client.println(data.length()); 
-    client.println(); 
-    client.print(data); 
-    Serial.println("POST CMPL!");
+  if (client.connect(server,80)) {     
+    client.print("GET /add.php?");      
+    client.print(data);
+    client.print(" HTTP/1.1"); 
+    client.println();
+    client.println("Host: 192.168.10.4");
+    client.println("Connection: close");
+    client.println();
+    Serial.println("GET CMPL!");
   }else{
-    Serial.println("POST Failed or server offline");
+    Serial.println("GET Failed or server offline");
+  }  
+  delay(1000);  
+  while (client.available()) {
+    char c = client.read();       
+    readString += c;  
   }
-  if (client.connected()) { 
-    client.stop();  
+  String checkStr = readString.substring(170);
+  Serial.println(checkStr); 
+  if (checkStr.indexOf('R')>1){
+     isOK = 1;
+     Serial.println("ACCESS GRANTED");     
+  }else{
+  if (checkStr.indexOf('N')>1){
+     isOK = 0;
+     Serial.println("ACCESS DENIED");     
   }
+  }
+  client.stop();    
   return;
 }
 void gateOpen(){
+  if(isOK==1){
   digitalWrite(6,HIGH);
   delay(100);
   digitalWrite(6,LOW);  
   return;
+  }
 }
 
 

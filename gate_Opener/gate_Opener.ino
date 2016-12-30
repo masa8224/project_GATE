@@ -5,10 +5,12 @@ void setup() {
   pinMode(9, OUTPUT);
   pinMode(3, INPUT);
   pinMode(4, INPUT);
-  pinMode(6, INPUT);
+  pinMode(10, OUTPUT);
+  pinMode(11, OUTPUT);
   digitalWrite(9,HIGH);
   digitalWrite(8,HIGH);
 }
+<<<<<<< HEAD
 void loop() {
   if (!digitalRead(4)){
     digitalWrite(9,HIGH);
@@ -17,9 +19,17 @@ void loop() {
     digitalWrite(8,HIGH);
   }
   if (analogRead(A0)>500){
+=======
+void loop() {  
+  digitalWrite(10,HIGH);
+  digitalWrite(11,LOW);
+  if (digitalRead(13)==HIGH){
+>>>>>>> ece32e8e01dd1d0b0b77305e7fbddd08dfa30815
     if (digitalRead(4)){
       Serial.println("Open");
       digitalWrite(9,LOW);
+      digitalWrite(10,LOW);
+      digitalWrite(11,HIGH);
     
     while (digitalRead(4)==HIGH){}
       digitalWrite(9,HIGH);    
