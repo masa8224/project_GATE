@@ -1,5 +1,5 @@
 <?php
-	session_start();
+	session_start();		
 ?>
 <html>
 <head>
@@ -14,19 +14,46 @@
 			background: lightcoral;
 			color: black;
 		}
+		.header{
+			margin-bottom: 1em;
+			background-color: yellow;
+			border: none;
+		}
+		.error{
+			display:none;
+			text-align:center;
+			border: 2px solid red;
+			background-color: lightcoral;
+			font-family:OpenSans;
+			margin-top: 1em;
+			padding: 6px;
+		}
 	</style>
+	
 </head>
 	<div class="login" style="width: 650px;">
 			<div class="header">
 			<img src="nts-logo.png" class="logo">
 			<font>Narathiwat School RFID System</font>
-			</div>
-			<br><br><br>
-			<div class="loginend" style="display:none;" id="failed">
-				<span style="font-family:OpenSans;">Your username or password does not match our record</span>
-			</div>
+			</div>					
 			<div style="display: block;text-align: left;">			
-			<form method="post">				
+			<form method="post">
+				<div class="error" id="failed">
+					<font>Your username or password does not match our record<font>
+				</div>	
+				<div class="error" id="expire">
+					<font>Your session has been expired<font>
+				</div>	
+				<?php
+					$q = $_GET['q'];
+					switch($q){
+						case 1:
+							echo "<script>document.getElementById('failed').style.display = 'block';</script>";
+							break;
+						case 2:
+							echo "<script>document.getElementById('expire').style.display = 'block';</script>";
+					}
+				?>				
 				<br>
 				<input name="usr" type="text" id="slot1" placeholder="Username" autocomplete="off" required autofocus>				
 				<br>
@@ -44,6 +71,7 @@
 	
 <?php 
 	$cookie_name = "user";
+	
 	if (isset($_COOKIE[$cookie_name])){
 		header("Location: index.php");
 	}
@@ -64,9 +92,7 @@
             $_SESSION['expire'] = $_SESSION['start'] + (30 * 60);	
 			header("Location: index.php");
 		}else{
-			echo "<script>";
-			echo "document.getElementByID('slot1').style.border='2px solid red';";
-			echo "</script>";
+			header("Location: login.php?q=1");
 			exit(0);
 		}
 	}

@@ -193,9 +193,9 @@ input[type="text"]:focus{
 	float: left;
 }
 .header{
-	background-color: #FFFF00;
+	background-color: yellow;
 	float: left;
-	text-align: left;
+	text-align: left;	
 }
 .header font{
 	font-family:OpenSans;
