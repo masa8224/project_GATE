@@ -1,3 +1,4 @@
+//Main Reader Unit Firmware ver 4
 #include <Ethernet.h>
 #include "RTClib.h"
 #include <MFRC522.h>
