@@ -32,3 +32,19 @@ function drawchart(row1){
 		chart.draw(data, options);
 		}
 }
+<<<<<<< HEAD
+=======
+function opentabs(evt,name) {
+	var i;
+	var x = document.getElementsByClassName("tabs");
+	for (i = 0; i < x.length; i++) {
+		x[i].style.display = "none"; 
+	}
+	tabOn = document.getElementsByClassName("tabOn");
+	for (i = 0; i < x.length; i++) {
+		tabOn[i].className = tabOn[i].className.replace(" yellow", "");
+	}
+	document.getElementById(name).style.display = "block"; 
+	evt.currentTarget.className += " yellow";
+}
+>>>>>>> a2ddd81ab3cfa82dd50c3c11f751286d95fe7075

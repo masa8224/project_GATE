@@ -6,45 +6,111 @@
 #include <SD.h>
 #include <LiquidCrystal_I2C.h>
 #define SS_PIN 53
-#define RST_PIN 5
+#define RST_PIN 3 
 LiquidCrystal_I2C lcd (0x27,20,4);
+char server[] = "192.168.1.105";
 byte readCard[4];
 byte mac[] = { 0xAA, 0xBB, 0xCC, 0xDD, 0xEF, 0x02 };  
+<<<<<<< HEAD
 IPAddress ip(192, 168, 1, 107); 
 byte server[] = { 192,168,0,108 }; 
 
+=======
+IPAddress ip(192, 168, 1, 121); 
+>>>>>>> a2ddd81ab3cfa82dd50c3c11f751286d95fe7075
 String data;
 String dataString;
+String readString;
+int isOK; 
+int re=0;
+EthernetClient client;
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 RTC_DS1307 rtc;
-EthernetClient client;
 void setup()
 {   
+  String date = "";
+  String timenow = "";
   pinMode(13,OUTPUT);
   pinMode(6,OUTPUT); 
+<<<<<<< HEAD
   pinMode(7,OUTPUT);  
+=======
+  pinMode(7,OUTPUT);
+  pinMode(9,OUTPUT); 
+  pinMode(8,OUTPUT);  
+>>>>>>> a2ddd81ab3cfa82dd50c3c11f751286d95fe7075
   //Begin       
   Serial.begin(9600);   
   SPI.begin();    
   lcd.begin();  
-  Ethernet.begin(mac,ip); 
+  lcd.print("Initializing...");
+  Serial.println("Initializing...");
+  lcd.setCursor(0,1);
+  lcd.print("Using DHCP...");
+  lcd.print("             ");
+  
+  //if (Ethernet.begin(mac) == 0) {
+  //  lcd.setCursor(0,1);
+  //  lcd.print("Using Pre-Config IP");
+  //  Ethernet.begin(mac, ip);
+ // }
+  Ethernet.begin(mac, ip);
+  
+  lcd.setCursor(0,1);
+  lcd.print("             ");
+  lcd.setCursor(0,1);
+  lcd.print("Ethernet");
+  lcd.setCursor(13,1);
+  lcd.print("[ OK ]");
+  lcd.setCursor(0,2);
+  lcd.print("IP:");
+  lcd.setCursor(4,2);
+  lcd.print(Ethernet.localIP());
+  Serial.println(Ethernet.localIP());
   mfrc522.PCD_Init();
+<<<<<<< HEAD
   if (!rtc.begin()){
     Serial.println("Error!: RTC not found");
   }
+=======
+  mfrc522.PCD_DumpVersionToSerial();
+  DateTime now = rtc.now();
+  date = String(now.year()) +"-"+String(now.month())+"-" +String(now.day()) ;
+  timenow = String(now.hour()) + ":"+ String(now.minute())+ ":"+ String(now.second());
+  Serial.println(date);
+  Serial.println(timenow);
+  lcd.setCursor(0,3);
+  lcd.print(date);
+  lcd.print("  ");
+  lcd.print(timenow);
+  delay(1000);
+>>>>>>> a2ddd81ab3cfa82dd50c3c11f751286d95fe7075
   //
-  Serial.println("Initializing...");
-  lcd.print("Init..."); 
+  
+  lcd.clear();
   //RTC Check
   if (!rtc.begin()){
-    Serial.println("Error!: RTC not found");
+    lcd.setCursor(0,0);
+    lcd.print("RTC");
+    lcd.setCursor(13,0);
+    lcd.print("[Error]");
+  }else{
+    lcd.setCursor(0,0);
+    lcd.print("RTC");
+    lcd.setCursor(13,0);
+    lcd.print("[ OK ]");
   }
+  
   //SD Check
   if (!SD.begin(4)) {
-      Serial.println("ERROR - SD card initialization failed!");     
+      Serial.println("ERROR - SD card initialization failed!");   
       lcd.clear();
-      lcd.print("Init FAILED!");  
+      lcd.setCursor(0,0);  
+      lcd.print("SD Card");
+      lcd.setCursor(10,0);
+      lcd.print("[ Failed ]"); 
       return;    
+<<<<<<< HEAD
   }
   Serial.println("SUCCESS - SD card initialized.");
   lcd.clear();
@@ -55,36 +121,82 @@ void setup()
     lcd.setCursor(0,1);
     Serial.println("Server Connected!");    
     lcd.print("Server online");
+=======
+>>>>>>> a2ddd81ab3cfa82dd50c3c11f751286d95fe7075
   }else{
-    lcd.setCursor(0,1);
-    Serial.println("Server offline");
-    lcd.print("Server offline");
-  }
-  if (client.connected()) { 
-    client.stop();  
-  }
-  //
+    Serial.println("SUCCESS - SD card initialized.");
+  }  
+  lcd.setCursor(0,1);
+  lcd.print("SD Card");
+  lcd.setCursor(13,1);
+  lcd.print("[ OK ]");  
+  //Server Check
   lcd.setCursor(0,2);
+  lcd.print("Server");
+  lcd.setCursor(7,2);
+  lcd.print("[connecting]");
+  retry:   
+  if (client.connect(server,80)) { 
+    lcd.setCursor(0,2);        
+    lcd.print("Server");
+    lcd.setCursor(7,2);
+    lcd.print("             ");    
+    lcd.setCursor(13,2);
+    lcd.print("[ OK ]");
+    Serial.println("Server online"); 
+    client.stop();  
+  }else{
+    if(re < 6){      
+      lcd.setCursor(0,3);
+      lcd.print("Retry: ");
+      lcd.print(re);
+      delay(500);
+      re++;
+      goto retry;      
+    }
+    lcd.setCursor(0,2);
+    lcd.print("Server");
+    lcd.setCursor(7,2);
+    lcd.print("             ");     
+    lcd.setCursor(13,2);
+    lcd.print("[Error]");    
+    Serial.println("Server offline"); 
+    lcd.setCursor(0,3);
+    lcd.print("Init FAILED!");
+    while(true);    
+  }
+  
+  //
+  lcd.setCursor(0,3);
   lcd.print("Init SUCCESS!"); 
   Serial.println("Stand By for Card");
   delay(1000);
   lcd.clear();
+<<<<<<< HEAD
   lcd.print("Stand By...");
   digitalWrite(6,LOW);  
+=======
+  lcd.print("Stand By...");  
+  digitalWrite(6,LOW);  
+  digitalWrite(8,LOW);
+  digitalWrite(9,LOW);
+>>>>>>> a2ddd81ab3cfa82dd50c3c11f751286d95fe7075
 }
 
-void loop(){  
+void loop(){   
   dataString = "";  
   String lcdString = "";
   String date = "";
-  String timenow = "";
+  String timenow = "";  
   if ( ! mfrc522.PICC_IsNewCardPresent()) {   
     return;
+   
   }
   if ( ! mfrc522.PICC_ReadCardSerial()) {
     return;
   }  
-  digitalWrite(13,HIGH);    
+    
+  digitalWrite(13,HIGH);
   for (int i = 0; i < 4; i++) {  //
     readCard[i] = mfrc522.uid.uidByte[i];
   }
@@ -107,17 +219,39 @@ void loop(){
   dataString = date +"  "+ timenow + " > " + String(combine);
   WriteToSD();
   lcd.clear();
-  lcd.print(lcdString);
-  postData();
+  lcd.print("Checking...");
+  postData();  
   dataString = "";
   data ="";
-  Serial.println("--------------------------------");
-  digitalWrite(6,HIGH);
-  delay(200);
-  digitalWrite(6,LOW);
-  delay(300);
+  Serial.println("--------------------------------");  
   digitalWrite(13,LOW);
+<<<<<<< HEAD
   gateOpen();
+=======
+  lcd.clear();
+  switch(isOK){
+    case 0:
+        lcd.print("ACCESS DENIED");
+        digitalWrite(8,HIGH);
+        break;
+    case 1:
+        lcd.print("ACCESS GRANTED");
+        digitalWrite(9,HIGH);
+        break;
+    case 2:
+        lcd.print("YOU'VE ALREADY ENTER");
+        digitalWrite(8,HIGH);
+        digitalWrite(9,HIGH);
+        break;
+  } 
+  gateOpen();
+  readString = "";
+  isOK = 0;
+  
+  delay(1500);
+  digitalWrite(8,LOW);
+  digitalWrite(9,LOW);
+>>>>>>> a2ddd81ab3cfa82dd50c3c11f751286d95fe7075
   lcd.clear();
   lcd.print("Stand By...");
 }
@@ -135,6 +269,7 @@ void WriteToSD(){
 }
 void postData(){
   Serial.println(data);
+<<<<<<< HEAD
   if (client.connect("192.168.1.109",80)) { 
     Serial.println("Server Connected!");
     client.println("POST /add.php HTTP/1.1"); 
@@ -145,19 +280,72 @@ void postData(){
     client.println(); 
     client.print(data); 
     Serial.println("POST CMPL!");
+=======
+  post:
+  if (client.connect(server,80)) {     
+    client.print("GET /add.php?mode=1&");      
+    client.print(data);
+    client.print(" HTTP/1.1"); 
+    client.println();
+    client.println("Host: 192.168.10.4");
+    client.println("Connection: close");
+    client.println();
+    Serial.println("GET CMPL!");
+>>>>>>> a2ddd81ab3cfa82dd50c3c11f751286d95fe7075
   }else{
-    Serial.println("POST Failed or server offline");
+    Serial.println("GET Failed or server offline");
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Error:");    
+    lcd.setCursor(0,1);
+    lcd.print("Can't connect to ser"); 
+    lcd.setCursor(0,2);
+    lcd.print("ver...");   
+    lcd.setCursor(0,3);
+    lcd.print("Pls check connection");
+    goto post;
+  }  
+  delay(1000); 
+  again: 
+  while (client.available()) {
+    char c = client.read();       
+    readString += c;  
   }
-  if (client.connected()) { 
-    client.stop();  
+  String checkStr = readString.substring(223);
+  Serial.println(checkStr); 
+  if (checkStr == ""){
+    goto again;
   }
+  if (checkStr.indexOf('R')>1){
+     isOK = 1;
+     Serial.println("ACCESS GRANTED");     
+  }else{
+  if (checkStr.indexOf('N')>1){
+     isOK = 0;
+     Serial.println("ACCESS DENIED");     
+  }else{
+    if (checkStr.indexOf('P')>1){
+     isOK = 2;
+     Serial.println("YOU'VE ALREADY ENTER");     
+  }
+  }
+  }
+  client.stop();    
   return;
 }
 void gateOpen(){
+<<<<<<< HEAD
+=======
+  if(isOK==1){
+>>>>>>> a2ddd81ab3cfa82dd50c3c11f751286d95fe7075
   digitalWrite(6,HIGH);
   delay(100);
   digitalWrite(6,LOW);  
   return;
+<<<<<<< HEAD
+=======
+  }
+>>>>>>> a2ddd81ab3cfa82dd50c3c11f751286d95fe7075
 }
 
 

@@ -1,47 +1,47 @@
-int up = 9;
-int down = 8;
-int upButton = 7;
-int downButton = 6;
-int IR1 = 5;
-int ls1 = 4;
-int ls2 = 3;
+
 void setup() {
   Serial.begin(9600);
-  pinMode(down, OUTPUT);
-  pinMode(up, OUTPUT);
-  pinMode(upButton, INPUT);
-  pinMode(downButton, INPUT);
-  pinMode(IR1, INPUT);
-  pinMode(ls1, INPUT);
-  pinMode(ls2, INPUT);
+  pinMode(8, OUTPUT);
+  pinMode(9, OUTPUT);
+  pinMode(3, INPUT);
+  pinMode(4, INPUT);
+  pinMode(10, OUTPUT);
+  pinMode(11, OUTPUT);
+  digitalWrite(9,HIGH);
+  digitalWrite(8,HIGH);
 }
-
+<<<<<<< HEAD
 void loop() {
-  if (digitalRead(4)==HIGH) {
-    //Serial.println("ls up 1");
-    if (digitalRead(IR1)) {
-      if (digitalRead(upButton)) {
-        Serial.println("up!");
-        digitalWrite(up, LOW);
-      } else {
-        digitalWrite(up, HIGH);
-      }
-    } else {
-      digitalWrite(up, LOW);
-    }
-  } else {
-    digitalWrite(up, LOW);
+  if (!digitalRead(4)){
+    digitalWrite(9,HIGH);
   }
-  //
-  if (digitalRead(3)==HIGH) {
-    //Serial.println("ls down 1");
-    if (digitalRead(downButton)) {
-      Serial.println("down!");
-      digitalWrite(down, LOW);
-    } else {
-      digitalWrite(down, HIGH);
+  if (!digitalRead(3)){
+    digitalWrite(8,HIGH);
+  }
+  if (analogRead(A0)>500){
+=======
+void loop() {  
+  digitalWrite(10,HIGH);
+  digitalWrite(11,LOW);
+  if (digitalRead(13)==HIGH){
+>>>>>>> ece32e8e01dd1d0b0b77305e7fbddd08dfa30815
+    if (digitalRead(4)){
+      Serial.println("Open");
+      digitalWrite(9,LOW);
+      digitalWrite(10,LOW);
+      digitalWrite(11,HIGH);
+    
+    while (digitalRead(4)==HIGH){}
+      digitalWrite(9,HIGH);    
+    delay(2000);
+    while(digitalRead(6)==LOW){}
+    delay(1000);
+    if (digitalRead(3)){
+      Serial.print("Close");
+      digitalWrite(8,LOW);
     }
-  } else {
-    digitalWrite(down, LOW);
+    while(digitalRead(3)){}
+    digitalWrite(8,HIGH);
+  }
   }
 }
