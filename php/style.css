@@ -141,6 +141,8 @@ input[type="text"]:focus{
 	position: relative;
 	top: 50%;
 	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
 	width: 600px;
 	hieght: 354px; 
 	background-color: lightgreen;
@@ -244,7 +246,27 @@ li a:hover, .dropdown:hover .dropbtn {
 li.dropdown {
     display: inline-block;
 }
-
+.tabsheader ul{
+	background-color: transparent;	
+	box-shadow: 0 6px 4px -4px rgba(0, 0, 0, 0.26);
+	margin-bottom: 1em;  
+}
+.tabsheader li a{
+	display: inline-block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 100%;
+	border-right:1px solid #ccc;
+} 
+.tabOn{
+	
+}
+.yellow{
+	background-color: yellow;
+}
 .dropdown-content {
     display: none;
     position: absolute;

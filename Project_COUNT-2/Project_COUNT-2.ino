@@ -10,9 +10,9 @@
 LiquidCrystal_I2C lcd (0x27,20,4);
 byte readCard[4];
 byte mac[] = { 0xAA, 0xBB, 0xCC, 0xDD, 0xEF, 0x02 };  
-IPAddress ip(192, 168, 1, 178); 
+IPAddress ip(192, 168, 1, 107); 
 byte server[] = { 192,168,0,108 }; 
-int combine;
+
 String data;
 String dataString;
 MFRC522 mfrc522(SS_PIN, RST_PIN);
@@ -21,13 +21,17 @@ EthernetClient client;
 void setup()
 {   
   pinMode(13,OUTPUT);
-  pinMode(6,OUTPUT);  
+  pinMode(6,OUTPUT); 
+  pinMode(7,OUTPUT);  
   //Begin       
   Serial.begin(9600);   
   SPI.begin();    
   lcd.begin();  
   Ethernet.begin(mac,ip); 
   mfrc522.PCD_Init();
+  if (!rtc.begin()){
+    Serial.println("Error!: RTC not found");
+  }
   //
   Serial.println("Initializing...");
   lcd.print("Init..."); 
@@ -47,7 +51,7 @@ void setup()
   lcd.setCursor(0,0);
   lcd.print("SD FOUND"); 
   //Server Check
-  if (client.connect("192.168.1.104",80)) { 
+  if (client.connect("192.168.1.109",80)) { 
     lcd.setCursor(0,1);
     Serial.println("Server Connected!");    
     lcd.print("Server online");
@@ -66,6 +70,7 @@ void setup()
   delay(1000);
   lcd.clear();
   lcd.print("Stand By...");
+  digitalWrite(6,LOW);  
 }
 
 void loop(){  
@@ -112,7 +117,7 @@ void loop(){
   digitalWrite(6,LOW);
   delay(300);
   digitalWrite(13,LOW);
-  delay(800);
+  gateOpen();
   lcd.clear();
   lcd.print("Stand By...");
 }
@@ -130,10 +135,10 @@ void WriteToSD(){
 }
 void postData(){
   Serial.println(data);
-  if (client.connect("192.168.1.104",80)) { 
+  if (client.connect("192.168.1.109",80)) { 
     Serial.println("Server Connected!");
     client.println("POST /add.php HTTP/1.1"); 
-    client.println("Host: 192.168.1.108"); 
+    client.println("Host: 192.168.1.109"); 
     client.println("Content-Type: application/x-www-form-urlencoded"); 
     client.print("Content-Length: "); 
     client.println(data.length()); 
@@ -148,4 +153,11 @@ void postData(){
   }
   return;
 }
+void gateOpen(){
+  digitalWrite(6,HIGH);
+  delay(100);
+  digitalWrite(6,LOW);  
+  return;
+}
+
 
