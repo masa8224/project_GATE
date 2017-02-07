@@ -97,7 +97,7 @@ void setup()
     lcd.print("[ OK ]");
   }
   
-  //SD Check
+  /*SD Check
   if (!SD.begin(4)) {
       Serial.println("ERROR - SD card initialization failed!");   
       lcd.clear();
@@ -112,7 +112,7 @@ void setup()
   lcd.setCursor(0,1);
   lcd.print("SD Card");
   lcd.setCursor(13,1);
-  lcd.print("[ OK ]");  
+  lcd.print("[ OK ]");  */
   //Server Check
   lcd.setCursor(0,2);
   lcd.print("Server");
@@ -206,7 +206,7 @@ void loop(){
   lcdString = "UID > "+String(combine);
   data = "date=" + date + "&time=" + timenow + "&uid=" + String(combine);   
   dataString = date +"  "+ timenow + " > " + String(combine);
-  WriteToSD();
+  //WriteToSD();
   lcd.clear();
   lcd.print("Checking...");
   postData();  
