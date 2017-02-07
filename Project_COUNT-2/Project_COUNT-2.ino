@@ -1,3 +1,4 @@
+//Main Reader Unit Firmware ver 4
 #include <Ethernet.h>
 #include "RTClib.h"
 #include <MFRC522.h>
@@ -31,6 +32,7 @@ void setup()
   pinMode(8,OUTPUT); 
   digitalWrite(6,HIGH); 
   pinMode(42,OUTPUT); 
+  pinMode(43,OUTPUT);
   digitalWrite(42,HIGH);
   //Begin       
   Serial.begin(9600);   
@@ -167,6 +169,7 @@ void setup()
 }
 
 void loop(){   
+  digitalWrite(43,HIGH);
   dataString = "";  
   String lcdString = "";
   String date = "";
@@ -180,6 +183,7 @@ void loop(){
   }  
   digitalWrite(42,LOW);
   delay(100);
+  digitalWrite(43,LOW);
   digitalWrite(42,HIGH);   
   digitalWrite(13,HIGH);
   for (int i = 0; i < 4; i++) {  //
