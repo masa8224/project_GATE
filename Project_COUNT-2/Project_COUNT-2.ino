@@ -9,7 +9,7 @@
 #define SS_PIN 53
 #define RST_PIN 3 
 LiquidCrystal_I2C lcd (0x27,20,4);
-char server[] = "192.168.88.250";
+char server[] = "192.168.88.236";
 byte readCard[4];
 byte mac[] = { 0xAA, 0xBB, 0xCC, 0xDD, 0xEF, 0x02 };  
 IPAddress ip(192, 168, 88, 238); 
@@ -298,7 +298,7 @@ void postData(){
     lcd.print("Pls check connection");
     goto post;
   }  
-  delay(500); 
+  //delay(200); 
   again: 
   while (client.available()) {
     char c = client.read();       

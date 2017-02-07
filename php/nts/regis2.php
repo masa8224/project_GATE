@@ -21,12 +21,15 @@ if($strMode == "add")
 		
 		
 		
-
+	if ($_POST['sms']=="yes"){
+		$sms=1;
+	}else{
+		$sms=0;
+	}
 	$strSQL1 = "INSERT INTO Plate ";
 	$strSQL1 .="( `SID`, `brand`, `Model`, `color`,  `plate`, `province`, `tel` ,`sms`) ";
 	$strSQL1 .="VALUES ";
-	$strSQL1 .="('".$_POST['sid']."', '".$_POST['brand']."', '".$_POST['model']."', 
-	'".$_POST['color']."', '".$_POST['plate']."', '".$_POST['province']."', '".$_POST['tel']."' ,'".$_POST['sms']."' ) " ;
+	$strSQL1 .="('".$_POST['sid']."', '".$_POST['brand']."', '".$_POST['model']."','".$_POST['color']."', '".$_POST['plate']."', '".$_POST['province']."', '".$_POST['tel']."' ,'".$sms."' ) " ;
 
 	$objQuery = mysqli_query($con,$strSQL1);
 	echo $strSQL1;
