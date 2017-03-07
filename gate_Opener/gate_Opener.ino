@@ -51,11 +51,5 @@ void loop() {
   }
 
   digitalWrite(13, LOW);
-  /*
-  if (digitalRead(3)){
-    Serial.println("ls1");
-    }
-  if (digitalRead(4)){
-    Serial.println("ls2");
-    } */
+  
 }
