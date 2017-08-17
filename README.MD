@@ -1,3 +1,3 @@
 # project_GATE
  Just a school project...
-#This is student project
+ This is student project
