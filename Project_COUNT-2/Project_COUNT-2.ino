@@ -64,8 +64,8 @@ void setup()
   pinMode(7,OUTPUT);
   pinMode(9,OUTPUT); 
   pinMode(8,OUTPUT); 
-  digitalWrite(6,HIGH); 
-  pinMode(42,OUTPUT); 
+  digitalWrite(6,HIGH);//<-----Signal
+  pinMode(42,OUTPUT); //<-----Buzzer 
   pinMode(43,OUTPUT);
   digitalWrite(42,HIGH);
   //Begin       
@@ -84,6 +84,7 @@ void setup()
   parseBytes(ServerIP, '.', server, 4, 10);  
   parseBytes(eekey, ',', key.keyByte, 6, 10);
   
+  /*-------------EEPROM TEST-------*/
     //dump_byte_array(key.keyByte, MFRC522::MF_KEY_SIZE);
   //Serial.println(ee2key[4]);
         //Serial.print(" ");
@@ -91,6 +92,7 @@ void setup()
   //dump_byte_array(server,4);  
   //Serial.println(ee2key[1]);
   /*---------------------------------------*/
+  /*--------------Check Data---------------*/
   /*bool correct= false;
     for (byte i = 0; i < 6; i++) {        
         //Serial.print(array1[i]);
@@ -108,6 +110,7 @@ void setup()
     }else{
       Serial.println("Data Incorrect");
     }*/
+  /*----------First Beep-----------*/
   digitalWrite(42,LOW);
   delay(50);
   digitalWrite(42,HIGH);
@@ -115,6 +118,7 @@ void setup()
   digitalWrite(42,LOW);
   delay(50);
   digitalWrite(42,HIGH);
+  /*------------------------------*/
   lcd.setCursor(0,1);
   lcd.print("Using DHCP...");
   lcd.print("             ");  
@@ -335,6 +339,7 @@ void loop(){
   String lcdString = "";
   String date = "";
   String timenow = "";  
+  /*------CARD OPERATION--------*/
   if ( ! mfrc522.PICC_IsNewCardPresent()) {   
     return;
    
@@ -363,7 +368,9 @@ void loop(){
   for (int i = 0; i < 4; i++) {  
     readCard[i] = mfrc522.uid.uidByte[i];
   }
+  /*-------------------------*/
   Serial.println();  
+  /*---------DATA OPERATION-----------*/
   DateTime now = rtc.now();
   uint32_t combine = 0;
   combine = readCard[3];
@@ -385,6 +392,8 @@ void loop(){
   lcd.print("Checking..."); 
   Serial.println("--------------------------------");  
   digitalWrite(13,LOW); 
+  /*-----------------------------------*/
+  /*-----------ACCESS CONTROL----------*/
   switch(postData(data)){
     case 2:
         lcd.clear();
@@ -425,7 +434,8 @@ void loop(){
         digitalWrite(42,HIGH);
         break;
   } 
-  mfrc522.PICC_HaltA();    
+  /*---------------------------------*/
+  mfrc522.PICC_HaltA(); 
   mfrc522.PCD_StopCrypto1();
   Serial.println("--------------------------------");
   delay(3000);
