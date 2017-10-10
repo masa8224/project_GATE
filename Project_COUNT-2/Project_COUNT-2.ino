@@ -227,38 +227,68 @@ void setup()
   digitalWrite(8,LOW);
   digitalWrite(9,LOW);
 }
-void READCARD(){
-  byte buffer[18];
-    byte size = sizeof(buffer);
-    byte blockAddr = 5;
-  Serial.print(F("Reading data from block ")); Serial.print(blockAddr);
-    Serial.println(F(" ..."));
-    MFRC522::StatusCode status;
-    status = (MFRC522::StatusCode) mfrc522.MIFARE_Read(blockAddr, buffer, &size);
-    if (status != MFRC522::STATUS_OK) {
-        Serial.print(F("MIFARE_Read() failed: "));
-        Serial.println(mfrc522.GetStatusCodeName(status));
-    }
-    Serial.print(F("Data in block ")); Serial.print(blockAddr); Serial.println(F(":"));
-    //dump_byte_array(buffer, 16); 
-    bool correct= false;
-    for (byte i = 0; i < 16; i++) {        
-        //Serial.print(buffer[i]);
-        //Serial.print(" ");
-        if(buffer[i]!=comData[i]){
-          //Serial.println("Data Incorrect");
-          correct= false;
-          break;          
-        }
-        correct = true;
-        //Serial.println("Data Correct");
-    }  
-    Serial.println("According to Data in card");
-    if (correct){
-      Serial.println("Access Granted");
-    }else{
-      Serial.println("Access Denied");
-    }
+uint32_t READCARD_HEADER(){  
+  for (int i = 0; i < 4; i++) {  
+    readCard[i] = mfrc522.uid.uidByte[i];
+  }
+  /*-------------------------*/
+  Serial.println();  
+  /*---------DATA OPERATION-----------*/  
+  uint32_t combine = 0;
+  combine = readCard[3];
+  combine <<= 8; 
+  combine |= readCard[2];
+  combine <<= 8; 
+  combine |= readCard[1];
+  combine <<= 8; 
+  combine |= readCard[0];  
+  Serial.println("--------------------------------");
+  Serial.println(combine);    
+  return combine;
+}
+void READCARD_SECTOR(){
+  int sector; 
+  byte trailerBlock   = 7;    
+  MFRC522::StatusCode status;
+  Serial.println(F("Authenticating again using key A..."));
+  status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key, &(mfrc522.uid));
+  if (status != MFRC522::STATUS_OK) {
+      Serial.print(F("This card is Unregistered Card "));
+      return;
+  }else{
+      Serial.print(F("This card is Registered Card "));       
+      byte buffer[18];
+      byte size = sizeof(buffer);
+      byte blockAddr = 5;
+      Serial.print(F("Reading data from block ")); Serial.print(blockAddr);
+      Serial.println(F(" ..."));
+      MFRC522::StatusCode status;
+      status = (MFRC522::StatusCode) mfrc522.MIFARE_Read(blockAddr, buffer, &size);
+      if (status != MFRC522::STATUS_OK) {
+          Serial.print(F("MIFARE_Read() failed: "));
+          Serial.println(mfrc522.GetStatusCodeName(status));
+      }
+      Serial.print(F("Data in block ")); Serial.print(blockAddr); Serial.println(F(":"));
+      //dump_byte_array(buffer, 16); 
+      bool correct= false;
+      for (byte i = 0; i < 16; i++) {        
+          //Serial.print(buffer[i]);
+          //Serial.print(" ");
+          if(buffer[i]!=comData[i]){
+            //Serial.println("Data Incorrect");
+            correct= false;
+            break;          
+          }
+          correct = true;
+          //Serial.println("Data Correct");
+      }  
+      Serial.println("According to Data in card");
+      if (correct){
+        Serial.println("Access Granted");
+      }else{
+        Serial.println("Access Denied");
+      }
+  }
 }
 void dump_byte_array(byte *buffer, byte bufferSize) {
     for (byte i = 0; i < bufferSize; i++) {
@@ -271,38 +301,47 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
 int postData(String dataPOST){
   Serial.println(dataPOST);
   String cString;
-  post:
-  if (client.connect(server,80)) {     
-    client.print("GET /add.php?mode=1&");      
-    client.print(dataPOST);
-    client.print(" HTTP/1.1"); 
-    client.println();
-    client.println("Host: 192.168.88.236");
-    client.println("Connection: close");
-    client.println();
-    Serial.println("GET CMPL!");
-  }else{
-    Serial.println("GET Failed or server offline");
-    lcd.clear();
-    lcd.setCursor(0,0);
-    lcd.print("Error:");    
-    lcd.setCursor(0,1);
-    lcd.print("Can't connect to ser"); 
-    lcd.setCursor(0,2);
-    lcd.print("ver...");   
-    lcd.setCursor(0,3);
-    lcd.print("Pls check connection");
-    goto post;
-  }     
-  again: 
-  while (client.available()) {
-    char c = client.read();       
-    cString += c;  
+  int retryPost = 0;
+  while (true){
+    if (client.connect(server,80)) {     
+      client.print("GET /add.php?mode=1&");      
+      client.print(dataPOST);
+      client.print(" HTTP/1.1"); 
+      client.println();
+      client.println("Host: 192.168.88.236");
+      client.println("Connection: close");
+      client.println();
+      Serial.println("GET CMPL!");
+      break;
+    }else{
+      if (retryPost < 4){
+        return 0;
+      }
+      Serial.println("GET Failed or server offline");
+      lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("Error:");    
+      lcd.setCursor(0,1);
+      lcd.print("Can't connect to ser"); 
+      lcd.setCursor(0,2);
+      lcd.print("ver...");   
+      lcd.setCursor(0,3);
+      lcd.print("Pls check connection");
+      retryPost++;
+    }
   }
-  String checkStr = cString.substring(223);
-  if (checkStr == ""){
-    goto again;
+  //--------------------------
+  while(true){
+    while (client.available()) {
+      char c = client.read();       
+      cString += c;  
+    }
+    String checkStr = cString.substring(223);
+    if (checkStr != ""){
+      break;
+    }
   }
+  //--------------------------
   Serial.println(checkStr);   
    
   if (checkStr.indexOf('R')>1){     
@@ -332,13 +371,13 @@ void gateOpen(){
 }
 
 void loop(){   
-  
-  digitalWrite(43,HIGH);
+  uint32_t UID;  
   String data;
   String dataString;  
   String lcdString = "";
   String date = "";
   String timenow = "";  
+  digitalWrite(43,HIGH);   
   /*------CARD OPERATION--------*/
   if ( ! mfrc522.PICC_IsNewCardPresent()) {   
     return;
@@ -347,46 +386,19 @@ void loop(){
   if ( ! mfrc522.PICC_ReadCardSerial()) {
     return;
   }  
+  UID = READCARD_HEADER();
+  DateTime now = rtc.now();
+  date = String(now.year()) +"-"+String(now.month())+"-" +String(now.day()) ;
+  timenow = String(now.hour()) + ":"+ String(now.minute())+ ":"+ String(now.second());
+  lcdString = "UID > "+String(UID);
+  data = "date=" + date + "&time=" + timenow + "&uid=" + String(UID);   
+  dataString = date +"  "+ timenow + " > " + String(UID);
   digitalWrite(42,LOW);
   delay(100);
   digitalWrite(43,LOW);
   digitalWrite(42,HIGH);  
   digitalWrite(13,HIGH);
-  int sector;
-    byte trailerBlock   = 7;
-    
-    MFRC522::StatusCode status;
-    Serial.println(F("Authenticating again using key A..."));
-    status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key, &(mfrc522.uid));
-    if (status != MFRC522::STATUS_OK) {
-        Serial.print(F("This card is Unregistered Card "));
-        
-    }else{
-        Serial.print(F("This card is Registered Card "));
-        READCARD();
-    }
-  for (int i = 0; i < 4; i++) {  
-    readCard[i] = mfrc522.uid.uidByte[i];
-  }
-  /*-------------------------*/
-  Serial.println();  
-  /*---------DATA OPERATION-----------*/
-  DateTime now = rtc.now();
-  uint32_t combine = 0;
-  combine = readCard[3];
-  combine <<= 8; 
-  combine |= readCard[2];
-  combine <<= 8; 
-  combine |= readCard[1];
-  combine <<= 8; 
-  combine |= readCard[0];  
-  Serial.println("--------------------------------");
-  Serial.println(combine);
-  date = String(now.year()) +"-"+String(now.month())+"-" +String(now.day()) ;
-  timenow = String(now.hour()) + ":"+ String(now.minute())+ ":"+ String(now.second());
-  lcdString = "UID > "+String(combine);
-  data = "date=" + date + "&time=" + timenow + "&uid=" + String(combine);   
-  dataString = date +"  "+ timenow + " > " + String(combine);
+  READCARD_SECTOR();
   //WriteToSD(dataString);
   lcd.clear();
   lcd.print("Checking..."); 
@@ -395,6 +407,9 @@ void loop(){
   /*-----------------------------------*/
   /*-----------ACCESS CONTROL----------*/
   switch(postData(data)){
+    case 0:
+        lcd.clear();
+        lcd.print("Connection Failed");
     case 2:
         lcd.clear();
         lcd.print("ACCESS DENIED");
