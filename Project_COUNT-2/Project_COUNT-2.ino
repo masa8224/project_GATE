@@ -25,22 +25,22 @@ RTC_DS3231 rtc;
 I2C_eeprom ee(0x57, MEMORY_SIZE);
 int comData[16]={1, 2, 3, 4, 5, 6, 255, 7, 128, 105, 3, 4, 255, 1, 255, 255};
 //int intarray[16];
+//Edit here
 boolean connection(){
   int re;
-  retry:   
-  if (client.connect(server,80)) { 
-    delay(1000);    
-    client.stop();  
-    return true;
-  }else{
-    if(re < 6){      
+  while (re<6){   
+    if (client.connect(server,80)) { 
+      delay(1000);    
+      client.stop();  
+      return true;
+    }else{
       lcd.setCursor(0,3);
       lcd.print("Retry: ");
       lcd.print(re);
       delay(500);
-      re++;
-      goto retry;      
+      re++;       
     }
+  }
     return false;
   }
 }
